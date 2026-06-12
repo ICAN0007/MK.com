@@ -2,7 +2,7 @@ import { useState, FormEvent } from 'react';
 import { WholesaleInquiry } from '../types';
 import { 
   AlertCircle, CheckCircle2, Download, Search, Filter, Mail, Phone, MapPin, 
-  Send, HelpCircle, FileText, Check, ShieldCheck, Copy, ExternalLink 
+  Send, HelpCircle, FileText, Check, ShieldCheck, Copy, ExternalLink, Clock 
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
