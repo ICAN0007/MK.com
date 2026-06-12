@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <!-- Definitions for the patterns used in the 8 squares -->
+  <defs>
+    <!-- Pattern 1: Vertical stripes -->
+    <pattern id="pat-vertical" width="20" height="20" patternUnits="userSpaceOnUse">
+      <rect width="8" height="20" fill="#E31C1C" />
+      <rect x="8" width="12" height="20" fill="#FFFFFF" />
+    </pattern>
+    
+    <!-- Pattern 2: Round hole perforated (staggered) -->
+    <pattern id="pat-perforated-1" width="16" height="16" patternUnits="userSpaceOnUse">
+      <rect width="16" height="16" fill="#E31C1C" />
+      <circle cx="8" cy="8" r="3.5" fill="#FFFFFF" />
+      <circle cx="0" cy="0" r="1.5" fill="#FFFFFF" />
+      <circle cx="16" cy="0" r="1.5" fill="#FFFFFF" />
+      <circle cx="0" cy="16" r="1.5" fill="#FFFFFF" />
+      <circle cx="16" cy="16" r="1.5" fill="#FFFFFF" />
+    </pattern>
+    
+    <!-- Pattern 3: Square mesh (window screen style) -->
+    <pattern id="pat-square-mesh" width="16" height="16" patternUnits="userSpaceOnUse">
+      <rect width="16" height="16" fill="#FFFFFF" />
+      <rect width="16" height="16" fill="none" stroke="#E31C1C" stroke-width="4" />
+    </pattern>
+    
+    <!-- Pattern 4: Alternating or medium dot pattern -->
+    <pattern id="pat-perforated-2" width="24" height="24" patternUnits="userSpaceOnUse">
+      <rect width="24" height="24" fill="#E31C1C" />
+      <circle cx="12" cy="12" r="5" fill="#FFFFFF" />
+    </pattern>
+    
+    <!-- Pattern 5: Very large perforation holes -->
+    <pattern id="pat-bubble" width="40" height="40" patternUnits="userSpaceOnUse">
+      <rect width="40" height="40" fill="#FFFFFF" />
+      <circle cx="20" cy="20" r="14" fill="#E31C1C" />
+    </pattern>
+    
+    <!-- Pattern 6: Diagonal grid / crimped mesh -->
+    <pattern id="pat-diagonal-grid" width="20" height="20" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+      <rect width="20" height="20" fill="#FFFFFF" stroke="#E31C1C" stroke-width="4" />
+    </pattern>
+    
+    <!-- Pattern 7: Grid grating bars (thick rectangular mesh) -->
+    <pattern id="pat-grating" width="24" height="24" patternUnits="userSpaceOnUse">
+      <rect width="24" height="24" fill="#FFFFFF" />
+      <rect width="24" height="24" fill="none" stroke="#E31C1C" stroke-width="5" />
+    </pattern>
+    
+    <!-- Pattern 8: Fine check / screen pattern -->
+    <pattern id="pat-checkerboard" width="10" height="10" patternUnits="userSpaceOnUse">
+      <rect width="5" height="5" fill="#E31C1C" />
+      <rect x="5" width="5" height="5" fill="#FFFFFF" />
+      <rect y="5" width="5" height="5" fill="#FFFFFF" />
+      <rect x="5" y="5" width="5" height="5" fill="#E31C1C" />
+    </pattern>
+  </defs>
+
+  <style>
+    .square-sheet {
+      stroke: #FFFFFF;
+      stroke-width: 6px;
+      stroke-linejoin: round;
+    }
+  </style>
+
+  <!-- BACKGROUND: TRANSPARENT FOR FAVICON -->
+  
+  <!-- Outer Starburst of 8 overlapping squares -->
+  <!-- Square 1: Top (vertical stripes) -->
+  <rect x="180" y="50" width="152" height="152" transform="rotate(0, 256, 256)" fill="url(#pat-vertical)" class="square-sheet" />
+  
+  <!-- Square 2: Top-right (fine perforation) -->
+  <rect x="180" y="50" width="152" height="152" transform="rotate(45, 256, 256)" fill="url(#pat-perforated-1)" class="square-sheet" />
+  
+  <!-- Square 3: Right (square mesh) -->
+  <rect x="180" y="50" width="152" height="152" transform="rotate(90, 256, 256)" fill="url(#pat-square-mesh)" class="square-sheet" />
+  
+  <!-- Square 4: Bottom-right (medium perforation / dots) -->
+  <rect x="180" y="50" width="152" height="152" transform="rotate(135, 256, 256)" fill="url(#pat-perforated-2)" class="square-sheet" />
+  
+  <!-- Square 5: Bottom (large bubbles) -->
+  <rect x="180" y="50" width="152" height="152" transform="rotate(180, 256, 256)" fill="url(#pat-bubble)" class="square-sheet" />
+  
+  <!-- Square 6: Bottom-left (diagonal grid) -->
+  <rect x="180" y="50" width="152" height="152" transform="rotate(225, 256, 256)" fill="url(#pat-diagonal-grid)" class="square-sheet" />
+  
+  <!-- Square 7: Left (grating bars) -->
+  <rect x="180" y="50" width="152" height="152" transform="rotate(270, 256, 256)" fill="url(#pat-grating)" class="square-sheet" />
+  
+  <!-- Square 8: Top-left (checkerboard) -->
+  <rect x="180" y="50" width="152" height="152" transform="rotate(315, 256, 256)" fill="url(#pat-checkerboard)" class="square-sheet" />
+
+  <!-- Center Circle Badge -->
+  <circle cx="256" cy="256" r="82" fill="#FFFFFF" stroke="#E31C1C" stroke-width="6" />
+  
+  <!-- Stylized MTC Lettering in Center -->
+  <!-- "T" Letter on Top -->
+  <path d="M 238 188 H 274 M 256 188 V 212" stroke="#E31C1C" stroke-width="7" stroke-linecap="square" fill="none" />
+  
+  <!-- M Shape in middle (with thick stroke and precise vertex) -->
+  <polygon points="214,280 214,214 232,214 256,255 280,214 298,214 298,280 278,280 278,236 256,274 232,236 232,280" fill="#E31C1C" />
+
+  <!-- C shape at bottom -->
+  <path d="M 270,294 H 244 V 318 H 270" stroke="#E31C1C" stroke-width="8" stroke-linecap="square" fill="none" />
+</svg>
