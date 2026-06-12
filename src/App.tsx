@@ -1358,6 +1358,19 @@ function CategoryRouteRenderer({ path, onNavigate, onAddToCart, cartItems }: Cat
 
 // INJECTABLE JSON-LD SCHEMAS
 function SchemaMarkup({ currentPath }: { currentPath: string }) {
+  // Setup standard WebSite schema for Google Search Engine Site Name
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Mukesh Trading Co.",
+    "alternateName": [
+      "Mukesh Trading Company",
+      "MUKESH TRADING CO.",
+      "Mukesh Trading"
+    ],
+    "url": "https://mukeshtrading.com/"
+  };
+
   // Setup standard LocalBusiness and Organization
   const orgSchema = {
     "@context": "https://schema.org",
@@ -1448,6 +1461,9 @@ function SchemaMarkup({ currentPath }: { currentPath: string }) {
 
   return (
     <>
+      <script type="application/ld+json">
+        {JSON.stringify(websiteSchema)}
+      </script>
       <script type="application/ld+json">
         {JSON.stringify(orgSchema)}
       </script>
