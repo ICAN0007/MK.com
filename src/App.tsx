@@ -47,8 +47,12 @@ const DEMO_INQUIRIES: WholesaleInquiry[] = [
 export default function App() {
   const [currentPath, setCurrentPath] = useState(() => {
     // Check initial path on mount for link sharing / deep linking
-    const path = window.location.pathname;
+    let path = window.location.pathname;
     if (path === '' || path === undefined) return '/';
+    // Normalize /products/xxx to /xxx internally for robust routing and category matching
+    if (path.startsWith('/products/') && path !== '/products/') {
+      return path.replace('/products', '');
+    }
     return path;
   });
 
@@ -121,15 +125,23 @@ export default function App() {
 
   // Dynamic routing navigation mechanism
   const navigateTo = (path: string) => {
+    let targetPath = path;
+    if (path.startsWith('/products/') && path !== '/products/') {
+      targetPath = path.substring('/products'.length);
+    }
     window.history.pushState(null, '', path);
-    setCurrentPath(path);
+    setCurrentPath(targetPath);
     window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   // Sync back/forward button clicks to UI state
   useEffect(() => {
     const handlePopState = () => {
-      setCurrentPath(window.location.pathname || '/');
+      let path = window.location.pathname || '/';
+      if (path.startsWith('/products/') && path !== '/products/') {
+        path = path.substring('/products'.length);
+      }
+      setCurrentPath(path);
     };
     window.addEventListener('popstate', handlePopState);
     return () => {

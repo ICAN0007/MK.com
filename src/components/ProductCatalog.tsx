@@ -218,8 +218,13 @@ export default function ProductCatalog({ onAddToCart, cartItems }: ProductCatalo
     }
   }, [currentPage]);
 
-  // Reset page when search or filters update
+  // Reset page when search or filters update but not on first mount
+  const isFirstRender = React.useRef(true);
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     setCurrentPage(1);
   }, [searchQuery, selectedCategory, selectedBeltSubType]);
 
