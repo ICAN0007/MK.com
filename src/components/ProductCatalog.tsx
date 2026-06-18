@@ -193,26 +193,50 @@ export default function ProductCatalog({ onAddToCart, cartItems }: ProductCatalo
 
   // Pagination State & URL query sync
   const itemsPerPage = 9;
-  const [currentPage, setCurrentPage] = useState<number>(() => {
+
+  // Extract page number from path
+  const getPageFromPath = (): number => {
     try {
+      const path = window.location.pathname;
+      const match = path.match(/\/products\/page-?(\d+)/);
+      if (match) {
+        const p = parseInt(match[1], 10);
+        return isNaN(p) || p < 1 ? 1 : p;
+      }
+      // Keep fallback checks for ?page=X query param if someone has previous links
       const params = new URLSearchParams(window.location.search);
       const p = parseInt(params.get('page') || '1', 10);
       return isNaN(p) || p < 1 ? 1 : p;
     } catch {
       return 1;
     }
+  };
+
+  const [currentPage, setCurrentPage] = useState<number>(() => {
+    return getPageFromPath();
   });
 
   // Sync page state & update browser URL
   useEffect(() => {
     try {
-      const url = new URL(window.location.href);
-      if (currentPage === 1) {
-        url.searchParams.delete('page');
+      const pathname = window.location.pathname;
+      const targetPath = currentPage === 1 ? '/products' : `/products/page${currentPage}`;
+
+      if (pathname !== targetPath) {
+        const params = new URLSearchParams(window.location.search);
+        params.delete('page');
+        const searchStr = params.toString();
+        const finalUrl = targetPath + (searchStr ? `?${searchStr}` : '');
+        window.history.pushState(null, '', finalUrl);
       } else {
-        url.searchParams.set('page', currentPage.toString());
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('page')) {
+          params.delete('page');
+          const searchStr = params.toString();
+          const finalUrl = targetPath + (searchStr ? `?${searchStr}` : '');
+          window.history.replaceState(null, '', finalUrl);
+        }
       }
-      window.history.replaceState(null, '', url.pathname + url.search);
     } catch (e) {
       console.error(e);
     }
@@ -231,13 +255,7 @@ export default function ProductCatalog({ onAddToCart, cartItems }: ProductCatalo
   // Deep-link popstate synchronization
   useEffect(() => {
     const handlePopState = () => {
-      try {
-        const params = new URLSearchParams(window.location.search);
-        const p = parseInt(params.get('page') || '1', 10);
-        setCurrentPage(isNaN(p) || p < 1 ? 1 : p);
-      } catch {
-        setCurrentPage(1);
-      }
+      setCurrentPage(getPageFromPath());
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);

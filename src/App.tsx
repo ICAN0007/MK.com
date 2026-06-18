@@ -49,6 +49,10 @@ export default function App() {
     // Check initial path on mount for link sharing / deep linking
     let path = window.location.pathname;
     if (path === '' || path === undefined) return '/';
+    // Normalize /products/page[X] to /products internally
+    if (path.match(/^\/products\/page-?\d+$/)) {
+      return '/products';
+    }
     // Normalize /products/xxx to /xxx internally for robust routing and category matching
     if (path.startsWith('/products/') && path !== '/products/') {
       return path.replace('/products', '');
@@ -126,7 +130,9 @@ export default function App() {
   // Dynamic routing navigation mechanism
   const navigateTo = (path: string) => {
     let targetPath = path;
-    if (path.startsWith('/products/') && path !== '/products/') {
+    if (path.match(/^\/products\/page-?\d+$/)) {
+      targetPath = '/products';
+    } else if (path.startsWith('/products/') && path !== '/products/') {
       targetPath = path.substring('/products'.length);
     }
     window.history.pushState(null, '', path);
@@ -138,10 +144,13 @@ export default function App() {
   useEffect(() => {
     const handlePopState = () => {
       let path = window.location.pathname || '/';
-      if (path.startsWith('/products/') && path !== '/products/') {
-        path = path.substring('/products'.length);
+      let targetPath = path;
+      if (path.match(/^\/products\/page-?\d+$/)) {
+        targetPath = '/products';
+      } else if (path.startsWith('/products/') && path !== '/products/') {
+        targetPath = path.substring('/products'.length);
       }
-      setCurrentPath(path);
+      setCurrentPath(targetPath);
     };
     window.addEventListener('popstate', handlePopState);
     return () => {
@@ -169,7 +178,18 @@ export default function App() {
   useEffect(() => {
     let title = 'Wire Netting & SS Wire Mesh Ahmedabad | Mukesh Trading';
     let desc = 'Premium SS Wire Mesh Supplier Gujarat. Mukesh Trading Co. supplies wire netting, perforated sheets, nylon sifter cloth, and conveyor belts in Ahmedabad since 1975.';
-    let canonical = 'https://mukeshtrading.com' + currentPath;
+    
+    let canonicalPath = currentPath;
+    if (currentPath === '/products') {
+      canonicalPath = window.location.pathname;
+    }
+    let canonical = 'https://mukeshtrading.com' + canonicalPath;
+
+    let pageSuffix = '';
+    const pageMatch = window.location.pathname.match(/\/products\/page-?(\d+)/);
+    if (pageMatch) {
+      pageSuffix = ` - Page ${pageMatch[1]}`;
+    }
 
     // Define correct meta tags on each category or main page subpath
     if (currentPath === '/') {
@@ -182,7 +202,7 @@ export default function App() {
       title = 'Contact Mukesh Trading Co | Wire Mesh Supplier Ahmedabad';
       desc = 'Contact Mukesh Trading Co Ahmedabad for wholesale prices on SS Wire Mesh, thresher parts, sifter screens, and conveyor belts. Request direct quote.';
     } else if (currentPath === '/products') {
-      title = 'B2B Industrial Products Catalog | Mukesh Trading Ahmedbad';
+      title = 'B2B Industrial Products Catalog | Mukesh Trading Ahmedbad' + pageSuffix;
       desc = 'Explore our comprehensive product catalog containing wire netting, perforated sheets, Swiss nylon cloth, cotton elevator belts, and bucket carriage bolts.';
     } else if (currentPath === '/industries-served') {
       title = industriesServedSEO.metaTitle;
