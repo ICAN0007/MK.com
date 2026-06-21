@@ -8,6 +8,7 @@ import InquiriesDashboard from './components/InquiriesDashboard';
 import AdSenseBanner from './components/AdSenseBanner';
 import AdSenseMultiplex from './components/AdSenseMultiplex';
 import AdSenseDisplay from './components/AdSenseDisplay';
+import GoogleSerpPreview from './components/GoogleSerpPreview';
 import { 
   Building, Mail, Phone, Clock, ChevronRight, Check, MapPin, ExternalLink, 
   ArrowRight, ShieldCheck, HelpCircle, FileText, Compass, Settings, AlertCircle, ShoppingCart 
@@ -485,6 +486,11 @@ export default function App() {
                           </div>
                         ))}
                       </div>
+                    </div>
+
+                    {/* INTERACTIVE ORGANIC SEARCH SITELINK LAYOUT (SAME-TO-SAME AS REFERENCE IMAGE) */}
+                    <div className="mt-20">
+                      <GoogleSerpPreview onNavigate={navigateTo} />
                     </div>
 
                     {/* FAQS Accordion: 20 Questions (satisfies SEO FAQ requirement) */}
