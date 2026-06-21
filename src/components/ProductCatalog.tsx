@@ -3,6 +3,7 @@ import { Search, Info, ShoppingBag, ArrowUpRight, Check, AlertCircle, X, ZoomIn,
 import { Product, CartItem } from '../types';
 import { WHOLESALE_PRODUCTS, TRADING_CATEGORIES } from '../data/products';
 import { motion, AnimatePresence } from 'motion/react';
+import AdSenseInFeed from './AdSenseInFeed';
 
 // B2B Technical Conversion Constant Database
 const MESH_CONVERSIONS = [
@@ -880,7 +881,7 @@ export default function ProductCatalog({ onAddToCart, cartItems }: ProductCatalo
       {paginatedProducts.length > 0 ? (
         <div className="space-y-10">
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {paginatedProducts.map((product) => {
+            {paginatedProducts.map((product, index) => {
               const hasEffect = addedItemEffect[product.id];
               const isExpanded = expandedProduct === product.id;
               const inputQty = quantities[product.id] ?? product.moq;
@@ -891,28 +892,28 @@ export default function ProductCatalog({ onAddToCart, cartItems }: ProductCatalo
               const alreadyInCart = cartItems?.find((item) => item.product.id === product.id);
 
               return (
-                <motion.div
-                  layout
-                  key={product.id}
-                  id={`product-card-${product.id}`}
-                  whileHover={{ y: -6, borderColor: '#005fa9', boxShadow: "0 10px 25px -5px rgba(0,0,0,0.06)" }}
-                  whileTap={{ scale: 0.99 }}
-                  transition={{ type: "spring", stiffness: 350, damping: 25 }}
-                  className="flex flex-col rounded-none border border-slate-100 bg-[#FFFFFF] p-5 relative text-left group cursor-pointer"
-                >
+                <React.Fragment key={product.id}>
+                  <motion.div
+                    layout
+                    id={`product-card-${product.id}`}
+                    whileHover={{ y: -6, borderColor: '#005fa9', boxShadow: "0 10px 25px -5px rgba(0,0,0,0.06)" }}
+                    whileTap={{ scale: 0.99 }}
+                    transition={{ type: "spring", stiffness: 350, damping: 25 }}
+                    className="flex flex-col rounded-none border border-slate-200 bg-[#FFFFFF] p-6 relative text-left group cursor-pointer transition-all duration-300 shadow-xs hover:shadow-md"
+                  >
                   {/* SKU Badge & Availability */}
-                  <div className="flex justify-between items-center mb-3">
-                    <span className="text-[9px] font-bold tracking-wider text-slate-400 uppercase font-mono bg-slate-50 border border-slate-100 rounded-none px-2 py-0.5">
-                      {product.sku}
+                  <div className="flex justify-between items-center mb-4">
+                    <span className="text-[9px] font-bold tracking-wider text-slate-500 uppercase font-mono bg-slate-50 border border-slate-100 rounded-none px-2 py-1">
+                      SKU: {product.sku}
                     </span>
                     
                     {product.isAvailable ? (
-                      <span className="inline-flex items-center text-[9px] font-bold tracking-wider uppercase text-slate-900 bg-slate-50 px-2 py-0.5 border border-slate-100 rounded-none">
-                        Ready Stock
+                      <span className="inline-flex items-center text-[9px] font-black tracking-widest uppercase text-[#005fa9] bg-[#005fa9]/5 px-2 py-1 border border-[#005fa9]/10 rounded-none">
+                        ● READY STOCK
                       </span>
                     ) : (
-                      <span className="inline-flex items-center text-[9px] font-bold tracking-wider uppercase text-slate-400 bg-slate-50 px-2 py-0.5 border border-slate-100 rounded-none">
-                        Restocking
+                      <span className="inline-flex items-center text-[9px] font-bold tracking-widest uppercase text-slate-400 bg-slate-50 px-2 py-1 border border-slate-100 rounded-none">
+                        RESTOCKING
                       </span>
                     )}
                   </div>
@@ -924,7 +925,7 @@ export default function ProductCatalog({ onAddToCart, cartItems }: ProductCatalo
                       setZoomScale(1);
                       setRotation(0);
                     }}
-                    className="aspect-video relative w-full overflow-hidden rounded-none bg-slate-50 mb-4 border border-slate-100 group cursor-zoom-in"
+                    className="aspect-video relative w-full overflow-hidden rounded-none bg-slate-50 mb-4 border border-slate-150 group cursor-zoom-in"
                     title="Click to maximize and zoom"
                   >
                     <img
@@ -934,36 +935,142 @@ export default function ProductCatalog({ onAddToCart, cartItems }: ProductCatalo
                       referrerPolicy="no-referrer"
                     />
                     {/* Category overlay */}
-                    <span className="absolute bottom-2 left-2 bg-slate-950 text-[9px] font-bold uppercase tracking-wider text-white px-2 py-0.5 rounded-none z-10">
+                    <span className="absolute bottom-2 left-2 bg-slate-950 text-[9px] font-black uppercase tracking-widest text-white px-2 py-1 rounded-none z-10">
                       {product.category}
                     </span>
 
                     {/* Elegant Magnify/Zoom Icon overlay on Hover */}
                     <div className="absolute inset-0 bg-slate-950/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
                       <div className="bg-slate-950/80 text-white flex items-center space-x-1.5 px-3 py-1.5 text-[9px] font-bold uppercase tracking-widest border border-white/10 shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                        <Maximize2 className="h-3.5 w-3.5" />
-                        <span>Maximize View</span>
+                        <Maximize2 className="h-3.5 w-3.5 text-[#3ba2ff]" />
+                        <span>Maximize Details</span>
                       </div>
                     </div>
                   </div>
 
                   {/* Info Text */}
-                  <div className="flex-1">
-                    <h3 className="text-xs font-bold text-slate-950 uppercase tracking-wide line-clamp-2 min-h-[40px] leading-tight flex items-start">
-                      {product.name}
-                    </h3>
-                    <p className="mt-1 text-xs text-slate-500 line-clamp-2 leading-relaxed font-sans">
-                      {product.description}
-                    </p>
+                  <div className="flex-1 flex flex-col justify-between">
+                    <div>
+                      <h3 className="text-sm font-extrabold text-slate-950 uppercase tracking-wide line-clamp-2 min-h-[40px] leading-snug flex items-start group-hover:text-[#005fa9] transition-colors duration-200">
+                        {product.name}
+                      </h3>
+                      <p className="mt-1.5 text-xs text-slate-500 line-clamp-2 leading-relaxed font-sans">
+                        {product.description}
+                      </p>
 
-                    {/* Packaging Details */}
-                    <div className="mt-3 flex flex-wrap gap-2 text-[9px] font-bold uppercase tracking-wider text-slate-500 font-sans">
-                      <span className="bg-slate-50 border border-slate-100 px-2 py-0.5 rounded-none">
-                        Pack: {product.packaging}
-                      </span>
-                      <span className="bg-slate-50 border border-slate-100 px-2 py-0.5 rounded-none">
-                        W: {product.weight}
-                      </span>
+                      {/* Packaging Details */}
+                      <div className="mt-3 flex flex-wrap gap-2 text-[9px] font-extrabold uppercase tracking-wider text-slate-500 font-sans">
+                        <span className="bg-slate-50 border border-slate-250 px-2 py-1 rounded-none">
+                          Pack: {product.packaging}
+                        </span>
+                        <span className="bg-slate-50 border border-slate-250 px-2 py-1 rounded-none font-mono">
+                          W: {product.weight}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* B2B Minimum Order limits & dynamic calculations */}
+                    <div className="mt-4 pt-4 border-t border-slate-100 flex flex-col space-y-2.5">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                          Wholesale MOQ Limit:
+                        </span>
+                        <span className="text-[10px] font-mono font-extrabold text-slate-900 bg-slate-50 px-2 py-0.5 border border-slate-150">
+                          {product.moq} {product.unit}
+                        </span>
+                      </div>
+
+                      {/* QUANTITY CONTROL BAR & BASKET ACTION */}
+                      <div className="flex flex-col space-y-2">
+                        <span className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">
+                          Select Requisition Quantity:
+                        </span>
+                        <div className="flex items-center justify-between gap-2 bg-slate-50 border border-slate-100 p-1">
+                          <div className="flex items-center space-x-1">
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                adjustQty(product.id, -Math.max(1, Math.round(product.moq / 10)), product.moq);
+                              }}
+                              className="w-7 h-7 bg-white border border-slate-200 text-slate-600 hover:bg-[#005fa9] hover:text-white flex items-center justify-center font-bold text-xs"
+                              title="Decrease"
+                            >
+                              -
+                            </button>
+                            <input
+                              type="number"
+                              value={inputQty}
+                              onChange={(e) => {
+                                const val = parseInt(e.target.value, 10);
+                                setQuantities((prev) => ({ ...prev, [product.id]: isNaN(val) ? 0 : val }));
+                              }}
+                              onClick={(e) => e.stopPropagation()}
+                              className="w-14 h-7 text-center font-mono font-bold text-xs bg-white border border-slate-200 focus:border-[#005fa9] outline-hidden focus:ring-1 focus:ring-[#005fa9]"
+                            />
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                adjustQty(product.id, Math.max(1, Math.round(product.moq / 10)), product.moq);
+                              }}
+                              className="w-7 h-7 bg-white border border-slate-200 text-slate-600 hover:bg-[#005fa9] hover:text-white flex items-center justify-center font-bold text-xs"
+                              title="Increase"
+                            >
+                              +
+                            </button>
+                          </div>
+                          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500 bg-slate-100 px-2 py-1">
+                            {product.unit}s
+                          </span>
+                        </div>
+
+                        {/* Error Warning */}
+                        {isBelowMoq && (
+                          <div className="text-[9px] text-[#E31C1C] font-semibold flex items-center gap-1 bg-red-50/50 p-1.5 border border-red-100/50">
+                            <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
+                            <span>Warning: Order size is below {product.moq} {product.unit} MOQ limit. Click below to auto-correct and add.</span>
+                          </div>
+                        )}
+
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleAddSubmit(product);
+                          }}
+                          className={`w-full rounded-none py-2.5 text-[9px] font-bold uppercase tracking-widest text-center cursor-pointer transition-all duration-300 flex items-center justify-center space-x-1.5 shadow-sm border ${
+                            hasEffect
+                              ? 'bg-emerald-600 border-emerald-600 text-white'
+                              : alreadyInCart
+                              ? 'bg-[#005fa9]/5 border-[#005fa9]/30 text-[#005fa9] hover:bg-[#005fa9] hover:text-white'
+                              : 'bg-slate-950 border-slate-950 text-white hover:bg-[#005fa9] hover:border-[#005fa9]'
+                          }`}
+                        >
+                          {hasEffect ? (
+                            <>
+                              <Check className="h-3.5 w-3.5 stroke-[3]" />
+                              <span>Added Successfully!</span>
+                            </>
+                          ) : alreadyInCart ? (
+                            <>
+                              <Check className="h-3.5 w-3.5" />
+                              <span>Update In Basket ({inputQty})</span>
+                            </>
+                          ) : (
+                            <>
+                              <ShoppingBag className="h-3.5 w-3.5" />
+                              <span>Add to Inquiry Basket</span>
+                            </>
+                          )}
+                        </button>
+
+                        {alreadyInCart && !hasEffect && (
+                          <span className="text-[9px] text-[#005fa9] font-extrabold uppercase tracking-widest text-center block mt-1 bg-[#005fa9]/5 p-1 border border-[#005fa9]/15">
+                            Currently In Inquiry list ({alreadyInCart.quantity} Units)
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
 
@@ -971,11 +1078,14 @@ export default function ProductCatalog({ onAddToCart, cartItems }: ProductCatalo
                   <div className="mt-4">
                     <button
                       id={`toggle-details-btn-${product.id}`}
-                      onClick={() => setExpandedProduct(isExpanded ? null : product.id)}
-                      className="flex w-full items-center justify-between font-bold rounded-none border border-slate-200 px-3 py-2 text-[9px] uppercase tracking-widest text-slate-600 hover:bg-slate-50 hover:text-slate-950 transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setExpandedProduct(isExpanded ? null : product.id);
+                      }}
+                      className="flex w-full items-center justify-between font-bold rounded-none border border-slate-200 px-3 py-2.5 text-[9px] uppercase tracking-widest text-slate-600 hover:bg-slate-50 hover:text-slate-950 transition-colors"
                     >
                       <span className="flex items-center space-x-1">
-                        <Info className="h-3.5 w-3.5" />
+                        <Info className="h-3.5 w-3.5 text-[#005fa9]" />
                         <span>{isExpanded ? 'Hide Technical Data' : 'View Technical Specifications'}</span>
                       </span>
                       <ArrowUpRight className={`h-3 w-3 transform transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
@@ -991,15 +1101,15 @@ export default function ProductCatalog({ onAddToCart, cartItems }: ProductCatalo
                         >
                           {/* Specifications */}
                           <div>
-                            <h4 className="text-[9px] font-bold text-slate-100 uppercase tracking-[0.2em] border-b border-slate-800 pb-1 mb-2">
-                              Technical Data
+                            <h4 className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] border-b border-slate-800 pb-1 mb-2">
+                              Technical Data Specifications
                             </h4>
                             <div className="space-y-1">
                               {product.specifications && product.specifications.length > 0 ? (
                                 product.specifications.map((spec, i) => (
-                                  <div key={i} className="flex justify-between text-[11px] leading-tight font-sans">
-                                    <span className="text-slate-500">{spec.label}:</span>
-                                    <span className="font-semibold text-slate-300">{spec.value}</span>
+                                  <div key={i} className="flex justify-between text-[11px] leading-6 font-sans">
+                                    <span className="text-slate-500 font-medium">{spec.label}:</span>
+                                    <span className="font-bold text-slate-200">{spec.value}</span>
                                   </div>
                                 ))
                               ) : (
@@ -1012,6 +1122,11 @@ export default function ProductCatalog({ onAddToCart, cartItems }: ProductCatalo
                     </AnimatePresence>
                   </div>
                 </motion.div>
+                {/* Insert AdSense in-feed native ads inside the product lists */}
+                {index === 2 && (
+                  <AdSenseInFeed className="sm:col-span-1 h-full" />
+                )}
+              </React.Fragment>
               );
             })}
           </div>

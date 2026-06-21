@@ -5,6 +5,9 @@ import Hero from './components/Hero';
 import ProductCatalog from './components/ProductCatalog';
 import ServicesPanel from './components/ServicesPanel';
 import InquiriesDashboard from './components/InquiriesDashboard';
+import AdSenseBanner from './components/AdSenseBanner';
+import AdSenseMultiplex from './components/AdSenseMultiplex';
+import AdSenseDisplay from './components/AdSenseDisplay';
 import { 
   Building, Mail, Phone, Clock, ChevronRight, Check, MapPin, ExternalLink, 
   ArrowRight, ShieldCheck, HelpCircle, FileText, Compass, Settings, AlertCircle, ShoppingCart 
@@ -368,6 +371,13 @@ export default function App() {
       {/* RENDER INJECTABLE HEADER JSON-LD SCHEMA BLOCKS */}
       <SchemaMarkup currentPath={currentPath} />
 
+      {/* TOP HEADER LEADERBOARD AD - HIGH VIEWABILITY AND PREMIUM CPM */}
+      <div className="bg-white border-b border-slate-200 py-2 w-full">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <AdSenseBanner className="my-1 min-h-[90px]" />
+        </div>
+      </div>
+
       {/* CORE FRAMEWORK FOR SYSTEM ROUTING */}
       <main className="flex-1">
         <AnimatePresence mode="wait">
@@ -434,6 +444,9 @@ export default function App() {
                         {homeSEO.localGeoSection.content}
                       </p>
                     </div>
+
+                    {/* Middle Page Display Ad */}
+                    <AdSenseDisplay className="mt-16" />
 
                     {/* Direct shortcuts to the 6 category pages (satisfies linking & visual categories requirement) */}
                     <div className="mt-16 border-t border-slate-100 pt-16">
@@ -592,6 +605,9 @@ export default function App() {
                         ))}
                       </div>
 
+                      {/* Middle page Display Ad banner */}
+                      <AdSenseDisplay className="my-10" />
+
                       {/* Timeline Sections */}
                       <div className="space-y-12">
                         {aboutSEO.blocks.map((block, idx) => (
@@ -666,7 +682,23 @@ export default function App() {
               {/* Product catalog list & filters */}
               <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
                 <Breadcrumbs crumbs={getBreadcrumbs()} onNavigate={navigateTo} />
-                <ProductCatalog onAddToCart={() => {}} cartItems={cartItems} />
+                <ProductCatalog 
+                  cartItems={cartItems} 
+                  onAddToCart={(p, q) => {
+                    setCartItems((prev) => {
+                      const existingIdx = prev.findIndex((item) => item.product.id === p.id);
+                      if (existingIdx > -1) {
+                        const updated = [...prev];
+                        updated[existingIdx].quantity = q;
+                        return updated;
+                      } else {
+                        return [...prev, { product: p, quantity: q }];
+                      }
+                    });
+                  }} 
+                />
+                {/* Horizontal ad banner */}
+                <AdSenseBanner />
               </div>
             </motion.div>
           )}
@@ -717,6 +749,9 @@ export default function App() {
                       }}
                     />
  
+                    {/* Horizontal ad banner */}
+                    <AdSenseBanner className="mt-8 pt-6 border-t border-slate-100" />
+ 
                   </div>
                 </div>
               </section>
@@ -761,6 +796,9 @@ export default function App() {
                         </div>
                       ))}
                     </div>
+
+                    {/* Middle Page Display Ad */}
+                    <AdSenseDisplay className="my-12" />
 
                     {/* Engineering Mechanics formula */}
                     <div className="bg-slate-950 text-white p-6 sm:p-8 border-l-[6px] border-[#005fa9] text-left mt-12 rounded-none">
@@ -962,6 +1000,11 @@ export default function App() {
 
         </AnimatePresence>
       </main>
+
+      {/* End of the page multiplex ads */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-2">
+        <AdSenseMultiplex />
+      </div>
 
       {/* FOOTER ACCORDING TO HIGH FIDELITY SPEC */}
       <footer className="bg-slate-950 text-slate-400 border-t border-slate-900" id="corporate-footer">
@@ -1308,12 +1351,11 @@ function CategoryRouteRenderer({ path, onNavigate, onAddToCart, cartItems }: Cat
                 <button
                   onClick={() => {
                     onAddToCart(p, p.moq);
-                    alert(`Added ${p.name} to inquiry list. Reach Contact Us page to finalize your RFQ submission!`);
                     onNavigate('/contact-us');
                   }}
-                  className="w-full text-center bg-slate-950 hover:bg-[#005fa9] text-white py-2 text-[10px] font-bold uppercase tracking-widest transition-colors cursor-pointer"
+                  className="w-full text-center bg-slate-950 hover:bg-[#005fa9] text-white py-2.5 text-[10px] font-extrabold uppercase tracking-widest transition-colors cursor-pointer flex items-center justify-center gap-1.5"
                 >
-                  Request B2B Quote
+                  <span>Request B2B Quote</span>
                 </button>
               </div>
             </div>
