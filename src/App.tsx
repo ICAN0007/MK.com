@@ -9,7 +9,6 @@ import InquiriesDashboard from './components/InquiriesDashboard';
 import AdSenseBanner from './components/AdSenseBanner';
 import AdSenseMultiplex from './components/AdSenseMultiplex';
 import AdSenseDisplay from './components/AdSenseDisplay';
-import GoogleSerpPreview from './components/GoogleSerpPreview';
 import { 
   Building, Mail, Phone, Clock, ChevronRight, Check, MapPin, ExternalLink, 
   ArrowRight, ShieldCheck, HelpCircle, FileText, Compass, Settings, AlertCircle, ShoppingCart 
@@ -215,11 +214,11 @@ export default function App() {
       title = aboutSEO.metaTitle;
       desc = aboutSEO.metaDescription;
     } else if (currentPath === '/contact-us') {
-      title = 'Contact Mukesh Trading Co | Wire Mesh Supplier Ahmedabad';
-      desc = 'Contact Mukesh Trading Co Ahmedabad for wholesale prices on SS Wire Mesh, thresher parts, sifter screens, and conveyor belts. Request direct quote.';
+      title = "Contact Us | Mukesh Trading Co. - B2B Sourcing & RFQ Desk";
+      desc = "Contact Mukesh Trading Co. for direct factory pricing on industrial wire mesh, perforated sheets, and thresher spares. Submit your B2B RFQ or visit our Asarwa showroom.";
     } else if (currentPath === '/products') {
-      title = 'B2B Industrial Products Catalog | Mukesh Trading Ahmedbad' + pageSuffix;
-      desc = 'Explore our comprehensive product catalog containing wire netting, perforated sheets, Swiss nylon cloth, cotton elevator belts, and bucket carriage bolts.';
+      title = "Products Catalogue | Mukesh Trading Co. - B2B Industrial Screens & Mesh" + pageSuffix;
+      desc = "Explore our complete B2B industrial products catalogue. Wholesale supplier of stainless steel wire mesh, perforated metal screens, Swiss nylon bolting cloth, and conveyor systems.";
     } else if (currentPath === '/industries-served') {
       title = industriesServedSEO.metaTitle;
       desc = industriesServedSEO.metaDescription;
@@ -500,9 +499,68 @@ export default function App() {
                       </div>
                     </div>
 
-                    {/* INTERACTIVE ORGANIC SEARCH SITELINK LAYOUT (SAME-TO-SAME AS REFERENCE IMAGE) */}
-                    <div className="mt-20">
-                      <GoogleSerpPreview onNavigate={navigateTo} />
+                    {/* CORNERSTONE DIRECTORY LINKS (OPTIMIZED FOR GOOGLE SITELINKS DETECTION) */}
+                    <div className="mt-16 bg-[#005fa9]/5 border-t border-b border-[#005fa9]/20 py-12 px-8 text-left rounded-lg" id="cornerstone-corporate-directory">
+                      <span className="text-[9px] bg-[#005fa9] text-white px-2.5 py-0.5 font-bold uppercase tracking-[0.2em] inline-block mb-3">
+                        Corporate Structure
+                      </span>
+                      <h3 className="text-xl font-black text-slate-900 tracking-tight uppercase mb-2">
+                        Primary Sitelinks Directory
+                      </h3>
+                      <p className="text-xs text-slate-600 mb-8 max-w-2xl font-sans">
+                        To simplify navigation and streamline B2B procurement, we prioritize four central pillars of our industrial enterprise. Select a cornerstone hub below for immediate specifications.
+                      </p>
+
+                      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                        {[
+                          { 
+                            label: 'About Us', 
+                            desc: 'Learn about our 50+ year legacy, family-owned manufacturing history, and chemical-grade filtration capabilities.', 
+                            path: '/about-us',
+                            linkText: 'Read Corporate History'
+                          },
+                          { 
+                            label: 'Products', 
+                            desc: 'Browse our complete catalog of precision wire mesh, thresher plates, plansifter accessories, and conveyor belting spares.', 
+                            path: '/products',
+                            linkText: 'Browse Product Catalog'
+                          },
+                          { 
+                            label: 'Industries Served', 
+                            desc: 'Explore custom solutions designed for flour millers, pharmaceutical granulators, chemical engineers, and mineral mines.', 
+                            path: '/industries-served',
+                            linkText: 'View Plant Solutions'
+                          },
+                          { 
+                            label: 'Contact Us', 
+                            desc: 'Connect with a procurement consultant, get immediate pricing guidelines, or submit a custom dimensional thresher blueprint.', 
+                            path: '/contact-us',
+                            linkText: 'Submit Inquiry or RFQ'
+                          }
+                        ].map((sit, idx) => (
+                          <div key={idx} className="bg-white border border-slate-200/80 p-5 flex flex-col justify-between hover:border-[#005fa9] hover:shadow-sm transition-all rounded">
+                            <div>
+                              <h4 className="text-sm font-extrabold text-slate-950 uppercase tracking-wide flex items-center gap-1.5 font-sans">
+                                <span className="w-1.5 h-1.5 bg-[#005fa9] rounded-full inline-block" />
+                                {sit.label}
+                              </h4>
+                              <p className="text-[11px] leading-relaxed text-slate-500 mt-2 font-sans">
+                                {sit.desc}
+                              </p>
+                            </div>
+                            <a 
+                              href={sit.path}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                navigateTo(sit.path);
+                              }}
+                              className="text-[10px] text-[#005fa9] hover:text-[#004d8a] font-extrabold uppercase tracking-widest mt-4 inline-flex items-center gap-1 cursor-pointer font-sans"
+                            >
+                              {sit.linkText} &rarr;
+                            </a>
+                          </div>
+                        ))}
+                      </div>
                     </div>
 
                     {/* FAQS Accordion: 20 Questions (satisfies SEO FAQ requirement) */}
@@ -702,6 +760,7 @@ export default function App() {
                 <Breadcrumbs crumbs={getBreadcrumbs()} onNavigate={navigateTo} />
                 <ProductCatalog 
                   cartItems={cartItems} 
+                  onNavigate={navigateTo}
                   onAddToCart={(p, q) => {
                     setCartItems((prev) => {
                       const existingIdx = prev.findIndex((item) => item.product.id === p.id);
@@ -1519,6 +1578,42 @@ function SchemaMarkup({ currentPath }: { currentPath: string }) {
     }))
   };
 
+  const siteNavigationSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SiteNavigationElement",
+        "@id": "https://mukeshtrading.com/#nav-home",
+        "name": "Home",
+        "url": "https://mukeshtrading.com/"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "@id": "https://mukeshtrading.com/#nav-about",
+        "name": "About Us",
+        "url": "https://mukeshtrading.com/about-us"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "@id": "https://mukeshtrading.com/#nav-products",
+        "name": "Products",
+        "url": "https://mukeshtrading.com/products"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "@id": "https://mukeshtrading.com/#nav-industries",
+        "name": "Industries Served",
+        "url": "https://mukeshtrading.com/industries-served"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "@id": "https://mukeshtrading.com/#nav-contact",
+        "name": "Contact Us",
+        "url": "https://mukeshtrading.com/contact-us"
+      }
+    ]
+  };
+
   const breadcrumbsSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -1551,6 +1646,9 @@ function SchemaMarkup({ currentPath }: { currentPath: string }) {
       </script>
       <script type="application/ld+json">
         {JSON.stringify(breadcrumbsSchema)}
+      </script>
+      <script type="application/ld+json">
+        {JSON.stringify(siteNavigationSchema)}
       </script>
       {currentPath === '/' && (
         <script type="application/ld+json">

@@ -1,6 +1,6 @@
 export const homeSEO = {
-  metaTitle: "Wire Netting & Perforated Sheets Ahmedabad | Mukesh Trading",
-  metaDescription: "Mukesh Trading Co supplies wire netting, perforated sheets, nylon bolting cloth, conveyor belts and industrial screening solutions across India since 1975.",
+  metaTitle: "Mukesh Trading Co. | Industrial Screening, Filtration & Wire Mesh Solutions",
+  metaDescription: "Established in 1975, Mukesh Trading Co. is a trusted supplier of wire mesh, perforated sheets, filtration media and industrial screening solutions serving pharmaceutical, chemical, food and engineering industries.",
   canonicalUrl: "https://mukeshtrading.com/",
   h1: "Wire Netting Supplier & Perforated Sheet Manufacturer in Ahmedabad",
   introduction: {

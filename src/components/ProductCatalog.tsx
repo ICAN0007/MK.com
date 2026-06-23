@@ -34,9 +34,10 @@ const GIDC_TRANSIT_DATA = [
 interface ProductCatalogProps {
   onAddToCart?: (product: Product, quantity: number) => void;
   cartItems?: CartItem[];
+  onNavigate?: (path: string) => void;
 }
 
-export default function ProductCatalog({ onAddToCart, cartItems }: ProductCatalogProps) {
+export default function ProductCatalog({ onAddToCart, cartItems, onNavigate }: ProductCatalogProps) {
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedProduct, setExpandedProduct] = useState<string | null>(null);
@@ -874,6 +875,111 @@ export default function ProductCatalog({ onAddToCart, cartItems }: ProductCatalo
               </button>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* HIGH-VISIBILITY B2B TECHNICAL SPECIFICATION SHEETS AND SIZING ADVISORY BANNERS */}
+      {onNavigate && (
+        <div className="mb-8" id="technical-advisory-banners">
+          {selectedCategory === 'Perforated Sheets' && (
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="p-5 sm:p-6 bg-[#005fa9]/5 border-l-4 border-[#005fa9] text-left flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 font-sans"
+            >
+              <div className="space-y-1">
+                <span className="text-[9px] bg-[#005fa9] text-white px-2 py-0.5 font-bold uppercase tracking-widest inline-block">Technical Resource</span>
+                <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wide">Detailed Perforated Sheets &amp; Plates Specs Sheet</h4>
+                <p className="text-xs text-slate-600 leading-relaxed max-w-2xl">Access full technical tables for round, slot, or capsule apertures, dimensional tolerances, and direct formulas for thresher parts grading screens.</p>
+              </div>
+              <button 
+                onClick={() => onNavigate('/perforated-sheets')}
+                className="cursor-pointer shrink-0 bg-[#005fa9] hover:bg-[#004d8a] text-white px-5 py-2.5 text-[10px] font-extrabold uppercase tracking-widest transition-colors font-sans text-center"
+              >
+                Open Specs Page &rarr;
+              </button>
+            </motion.div>
+          )}
+
+          {(selectedCategory === 'SS Wire Mesh' || selectedCategory === 'Spring Steel') && (
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="p-5 sm:p-6 bg-[#005fa9]/5 border-l-4 border-[#005fa9] text-left flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 font-sans"
+            >
+              <div className="space-y-1">
+                <span className="text-[9px] bg-[#005fa9] text-white px-2 py-0.5 font-bold uppercase tracking-widest inline-block">Technical Resource</span>
+                <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wide">Detailed Wire Netting &amp; Woven Mesh Specs Sheet</h4>
+                <p className="text-xs text-slate-600 leading-relaxed max-w-2xl">Access our intensive wire netting guide featuring dynamic micron, inch, and millimeter aperture conversion tables, wire diameters, and crimping details.</p>
+              </div>
+              <button 
+                onClick={() => onNavigate('/wire-netting')}
+                className="cursor-pointer shrink-0 bg-[#005fa9] hover:bg-[#004d8a] text-white px-5 py-2.5 text-[10px] font-extrabold uppercase tracking-widest transition-colors font-sans text-center"
+              >
+                Open Specs Page &rarr;
+              </button>
+            </motion.div>
+          )}
+
+          {selectedCategory === 'Candle Filter & Extruder Screens' && (
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="p-5 sm:p-6 bg-[#005fa9]/5 border-l-4 border-[#005fa9] text-left flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 font-sans"
+            >
+              <div className="space-y-1">
+                <span className="text-[9px] bg-[#005fa9] text-white px-2 py-0.5 font-bold uppercase tracking-widest inline-block">Technical Resource</span>
+                <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wide">Industrial Filters, Sintered Candle Specs Sheet</h4>
+                <p className="text-xs text-slate-600 leading-relaxed max-w-2xl">Access precise flow indices, chemical resistance profiles, multi-layered mesh counts, and design standards for extruder and filter accessories.</p>
+              </div>
+              <button 
+                onClick={() => onNavigate('/industrial-filters')}
+                className="cursor-pointer shrink-0 bg-[#005fa9] hover:bg-[#004d8a] text-white px-5 py-2.5 text-[10px] font-extrabold uppercase tracking-widest transition-colors font-sans text-center"
+              >
+                Open Specs Page &rarr;
+              </button>
+            </motion.div>
+          )}
+
+          {selectedCategory === 'Elevator Bucket' && (
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="p-5 sm:p-6 bg-[#005fa9]/5 border-l-4 border-[#005fa9] text-left flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 font-sans"
+            >
+              <div className="space-y-1">
+                <span className="text-[9px] bg-[#005fa9] text-white px-2 py-0.5 font-bold uppercase tracking-widest inline-block">Technical Resource</span>
+                <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wide">Vertical Elevator Bucket Specs Sheet</h4>
+                <p className="text-xs text-slate-600 leading-relaxed max-w-2xl">Review volumetric capacity parameters, bolt spacing sizes, discharge trajectories, and heavy HDPE/Polyurethane/Steel material standards.</p>
+              </div>
+              <button 
+                onClick={() => onNavigate('/elevator-buckets')}
+                className="cursor-pointer shrink-0 bg-[#005fa9] hover:bg-[#004d8a] text-white px-5 py-2.5 text-[10px] font-extrabold uppercase tracking-widest transition-colors font-sans text-center"
+              >
+                Open Specs Page &rarr;
+              </button>
+            </motion.div>
+          )}
+
+          {selectedCategory === 'Balt' && (
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="p-5 sm:p-6 bg-[#005fa9]/5 border-l-4 border-[#005fa9] text-left flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 font-sans"
+            >
+              <div className="space-y-1">
+                <span className="text-[9px] bg-[#005fa9] text-white px-2 py-0.5 font-bold uppercase tracking-widest inline-block">Technical Resource</span>
+                <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wide">Rubber Conveyor Belting Solutions Sheet</h4>
+                <p className="text-xs text-slate-600 leading-relaxed max-w-2xl">Access technical layouts of multi-ply EP fabric layouts, top rubber cover thickness parameters, grade matching, and splicing methods.</p>
+              </div>
+              <button 
+                onClick={() => onNavigate('/conveyor-belts')}
+                className="cursor-pointer shrink-0 bg-[#005fa9] hover:bg-[#004d8a] text-white px-5 py-2.5 text-[10px] font-extrabold uppercase tracking-widest transition-colors font-sans text-center"
+              >
+                Open Specs Page &rarr;
+              </button>
+            </motion.div>
+          )}
         </div>
       )}
 

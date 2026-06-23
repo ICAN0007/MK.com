@@ -1,6 +1,6 @@
 export const industriesServedSEO = {
-  metaTitle: "Industrial Sifting & Screening Solutions India | Mukesh Trading",
-  metaDescription: "Providing premium wire netting, sifter screens, conveyor belts, and vertical elevator spares to Rice Mills, Flour Mills, Cement Plants, and chemical industries.",
+  metaTitle: "Industries Served | Mukesh Trading Co. - Food, Chemical, Pharma & Mining",
+  metaDescription: "Providing high-precision wire netting, thresher plates, plansifter spares, and industrial filtration accessories to pharmaceutical, chemical, flour mill, and quarry industries.",
   canonicalUrl: "https://mukeshtrading.com/industries-served",
   h1: "Industrial Sectors Served & Technical Mill Spares Supply",
   intro: {

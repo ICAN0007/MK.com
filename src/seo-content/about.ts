@@ -1,6 +1,6 @@
 export const aboutSEO = {
-  metaTitle: "About Mukesh Trading Co | Industrial Material Supplier Ahmedabad",
-  metaDescription: "Learn about Mukesh Trading Co., a premier supplier of wire mesh, perforated sheets, nylon bolting cloth, and mill machinery parts in Ahmedabad since 1975.",
+  metaTitle: "About Us | Mukesh Trading Co. - Industrial Sifting Legacy Since 1975",
+  metaDescription: "Established in 1975, learn about Mukesh Trading Co.'s 50+ year history of supplying premium industrial wire mesh, perforated sheets, nylon bolting cloth, and grain processing spares.",
   canonicalUrl: "https://mukeshtrading.com/about-us",
   h1: "About Mukesh Trading Co. - 50+ Years of Industrial Leadership in Gujarat",
   intro: {
