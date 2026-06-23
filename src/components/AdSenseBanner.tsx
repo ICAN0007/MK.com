@@ -8,8 +8,6 @@ export default function AdSenseBanner({ className = '' }: AdSenseBannerProps) {
   const adRef = useRef<HTMLModElement>(null);
 
   useEffect(() => {
-    // Prevent push blockages or pushing into unmounted nodes.
-    // In React SPAs, when navigating away and coming back, push needs to be invoked.
     if (adRef.current) {
       try {
         const adsbygoogle = (window as any).adsbygoogle || [];

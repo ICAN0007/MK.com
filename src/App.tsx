@@ -144,7 +144,7 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
-  // Sync back/forward button clicks to UI state
+  // Sync back/forward button clicks to UI state & custom component transitions
   useEffect(() => {
     const handlePopState = () => {
       let path = window.location.pathname || '/';
@@ -156,9 +156,20 @@ export default function App() {
       }
       setCurrentPath(targetPath);
     };
+    
+    const handleCustomNavigate = (e: Event) => {
+      const customEvent = e as CustomEvent<string>;
+      if (customEvent.detail) {
+        navigateTo(customEvent.detail);
+      }
+    };
+
     window.addEventListener('popstate', handlePopState);
+    window.addEventListener('app-navigate', handleCustomNavigate);
+    
     return () => {
       window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('app-navigate', handleCustomNavigate);
     };
   }, []);
 

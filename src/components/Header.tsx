@@ -43,13 +43,66 @@ export default function Header({ currentPath, onNavigate }: HeaderProps) {
           className="flex cursor-pointer items-center space-x-3 py-4"
           id="header-logo-container"
         >
-          {/* Logo Icon */}
-          <img 
-            src="/favicon.svg" 
-            alt="MUKESH TRADING CO. Logo" 
-            className="h-8 w-8 sm:h-10 sm:w-10 object-contain rounded-full bg-white p-0.5" 
-            referrerPolicy="no-referrer"
-          />
+          {/* Logo Icon - rendered as a high-fidelity inline SVG to guarantee instant loading and absolute visibility */}
+          <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-white p-0.5 flex items-center justify-center overflow-hidden">
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              viewBox="0 0 512 512" 
+              className="w-full h-full object-contain"
+            >
+              <defs>
+                <pattern id="pat-vertical-header" width="20" height="20" patternUnits="userSpaceOnUse">
+                  <rect width="8" height="20" fill="#E31C1C" />
+                  <rect x="8" width="12" height="20" fill="#FFFFFF" />
+                </pattern>
+                <pattern id="pat-perforated-1-header" width="16" height="16" patternUnits="userSpaceOnUse">
+                  <rect width="16" height="16" fill="#E31C1C" />
+                  <circle cx="8" cy="8" r="3.5" fill="#FFFFFF" />
+                  <circle cx="0" cy="0" r="1.5" fill="#FFFFFF" />
+                  <circle cx="16" cy="0" r="1.5" fill="#FFFFFF" />
+                  <circle cx="0" cy="16" r="1.5" fill="#FFFFFF" />
+                  <circle cx="16" cy="16" r="1.5" fill="#FFFFFF" />
+                </pattern>
+                <pattern id="pat-square-mesh-header" width="16" height="16" patternUnits="userSpaceOnUse">
+                  <rect width="16" height="16" fill="#FFFFFF" />
+                  <rect width="16" height="16" fill="none" stroke="#E31C1C" strokeWidth="4" />
+                </pattern>
+                <pattern id="pat-perforated-2-header" width="24" height="24" patternUnits="userSpaceOnUse">
+                  <rect width="24" height="24" fill="#E31C1C" />
+                  <circle cx="12" cy="12" r="5" fill="#FFFFFF" />
+                </pattern>
+                <pattern id="pat-bubble-header" width="40" height="40" patternUnits="userSpaceOnUse">
+                  <rect width="40" height="40" fill="#FFFFFF" />
+                  <circle cx="20" cy="20" r="14" fill="#E31C1C" />
+                </pattern>
+                <pattern id="pat-diagonal-grid-header" width="20" height="20" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+                  <rect width="20" height="20" fill="#FFFFFF" stroke="#E31C1C" strokeWidth="4" />
+                </pattern>
+                <pattern id="pat-grating-header" width="24" height="24" patternUnits="userSpaceOnUse">
+                  <rect width="24" height="24" fill="#FFFFFF" />
+                  <rect width="24" height="24" fill="none" stroke="#E31C1C" strokeWidth="5" />
+                </pattern>
+                <pattern id="pat-checkerboard-header" width="10" height="10" patternUnits="userSpaceOnUse">
+                  <rect width="5" height="5" fill="#E31C1C" />
+                  <rect x="5" width="5" height="5" fill="#FFFFFF" />
+                  <rect y="5" width="5" height="5" fill="#FFFFFF" />
+                  <rect x="5" y="5" width="5" height="5" fill="#E31C1C" />
+                </pattern>
+              </defs>
+              <rect x="180" y="50" width="152" height="152" transform="rotate(0, 256, 256)" fill="url(#pat-vertical-header)" stroke="#FFFFFF" strokeWidth="6px" strokeLinejoin="round" />
+              <rect x="180" y="50" width="152" height="152" transform="rotate(45, 256, 256)" fill="url(#pat-perforated-1-header)" stroke="#FFFFFF" strokeWidth="6px" strokeLinejoin="round" />
+              <rect x="180" y="50" width="152" height="152" transform="rotate(90, 256, 256)" fill="url(#pat-square-mesh-header)" stroke="#FFFFFF" strokeWidth="6px" strokeLinejoin="round" />
+              <rect x="180" y="50" width="152" height="152" transform="rotate(135, 256, 256)" fill="url(#pat-perforated-2-header)" stroke="#FFFFFF" strokeWidth="6px" strokeLinejoin="round" />
+              <rect x="180" y="50" width="152" height="152" transform="rotate(180, 256, 256)" fill="url(#pat-bubble-header)" stroke="#FFFFFF" strokeWidth="6px" strokeLinejoin="round" />
+              <rect x="180" y="50" width="152" height="152" transform="rotate(225, 256, 256)" fill="url(#pat-diagonal-grid-header)" stroke="#FFFFFF" strokeWidth="6px" strokeLinejoin="round" />
+              <rect x="180" y="50" width="152" height="152" transform="rotate(270, 256, 256)" fill="url(#pat-grating-header)" stroke="#FFFFFF" strokeWidth="6px" strokeLinejoin="round" />
+              <rect x="180" y="50" width="152" height="152" transform="rotate(315, 256, 256)" fill="url(#pat-checkerboard-header)" stroke="#FFFFFF" strokeWidth="6px" strokeLinejoin="round" />
+              <circle cx="256" cy="256" r="82" fill="#FFFFFF" stroke="#E31C1C" strokeWidth="6" />
+              <path d="M 238 188 H 274 M 256 188 V 212" stroke="#E31C1C" strokeWidth="7" strokeLinecap="square" fill="none" />
+              <polygon points="214,280 214,214 232,214 256,255 280,214 298,214 298,280 278,280 278,236 256,274 232,236 232,280" fill="#E31C1C" />
+              <path d="M 270,294 H 244 V 318 H 270" stroke="#E31C1C" strokeWidth="8" strokeLinecap="square" fill="none" />
+            </svg>
+          </div>
           {/* uppercase bold brand layout */}
           <div className="flex items-baseline font-sans text-sm sm:text-base tracking-wider uppercase">
             <span className="font-extrabold text-white">MUKESH TRADING CO.</span>

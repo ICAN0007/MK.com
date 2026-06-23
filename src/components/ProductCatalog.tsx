@@ -1134,13 +1134,13 @@ export default function ProductCatalog({ onAddToCart, cartItems }: ProductCatalo
           {/* B2B METRIC PAGINATION CONTROLS */}
           {totalPages > 1 && (
             <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-100 pt-8" id="catalog-pagination">
-              <p className="text-xs text-slate-500 font-sans">
+              <p className="text-xs text-slate-500 font-sans text-center sm:text-left w-full sm:w-auto">
                 Showing <span className="font-semibold text-slate-900">{Math.min((currentPage - 1) * itemsPerPage + 1, filteredProducts.length)}</span> to{' '}
                 <span className="font-semibold text-slate-900">{Math.min(currentPage * itemsPerPage, filteredProducts.length)}</span> of{' '}
                 <span className="font-semibold text-slate-900">{filteredProducts.length}</span> materials
               </p>
 
-              <div className="flex items-center space-x-1.5 font-mono text-[10px]">
+              <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-1.5 font-mono text-[10px] w-full sm:w-auto">
                 {/* FIRST */}
                 <motion.button
                   type="button"
@@ -1151,13 +1151,15 @@ export default function ProductCatalog({ onAddToCart, cartItems }: ProductCatalo
                   disabled={currentPage === 1}
                   whileHover={currentPage !== 1 ? { scale: 1.05 } : {}}
                   whileTap={currentPage !== 1 ? { scale: 0.95 } : {}}
-                  className={`px-3 py-2 uppercase font-extrabold tracking-widest rounded-none border transition-all ${
+                  className={`px-2 py-1.5 sm:px-3 sm:py-2 flex items-center justify-center uppercase font-extrabold tracking-widest rounded-none border transition-all ${
                     currentPage === 1
                       ? 'text-slate-300 border-slate-100 cursor-not-allowed bg-slate-50/50'
                       : 'text-[#005fa9] border-slate-200 hover:border-[#005fa9] hover:bg-slate-50 cursor-pointer'
                   }`}
+                  title="First Page"
                 >
-                  First
+                  <span className="hidden sm:inline">First</span>
+                  <span className="inline sm:hidden text-xs font-sans font-bold">&laquo;</span>
                 </motion.button>
 
                 {/* PREV < */}
@@ -1170,36 +1172,90 @@ export default function ProductCatalog({ onAddToCart, cartItems }: ProductCatalo
                   disabled={currentPage === 1}
                   whileHover={currentPage !== 1 ? { scale: 1.05 } : {}}
                   whileTap={currentPage !== 1 ? { scale: 0.95 } : {}}
-                  className={`flex items-center justify-center p-2 border transition-all ${
+                  className={`flex items-center justify-center p-1.5 sm:p-2 border transition-all ${
                     currentPage === 1
                       ? 'text-slate-300 border-slate-100 cursor-not-allowed bg-slate-50/50'
                       : 'text-[#005fa9] border-slate-200 hover:border-[#005fa9] hover:bg-slate-50 cursor-pointer'
                   }`}
                   title="Previous Page"
                 >
-                  <ChevronLeft className="h-3.5 w-3.5" />
+                  <ChevronLeft className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                 </motion.button>
 
-                {/* PAGE NUMBERS */}
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
-                  <motion.button
-                    key={pageNum}
-                    type="button"
-                    onClick={() => {
-                      setCurrentPage(pageNum);
-                      window.scrollTo({ top: 350, behavior: 'smooth' });
-                    }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className={`w-8.5 h-8.5 flex items-center justify-center font-bold font-sans transition-all border ${
-                      currentPage === pageNum
-                        ? 'bg-[#005fa9] border-[#005fa9] text-white'
-                        : 'text-slate-600 border-slate-200 hover:border-slate-400 hover:bg-slate-50 cursor-pointer'
-                    }`}
-                  >
-                    {pageNum}
-                  </motion.button>
-                ))}
+                {/* PAGE NUMBERS (with sliding window to optimize mobile views) */}
+                {(() => {
+                  const pages: number[] = [];
+                  
+                  // Compute start and end page (sliding window)
+                  let start = Math.max(1, currentPage - 1);
+                  let end = Math.min(totalPages, currentPage + 1);
+                  
+                  if (currentPage <= 2) {
+                    end = Math.min(totalPages, 3);
+                  } else if (currentPage >= totalPages - 1) {
+                    start = Math.max(1, totalPages - 2);
+                  }
+                  
+                  for (let i = start; i <= end; i++) {
+                    pages.push(i);
+                  }
+                  
+                  return (
+                    <>
+                      {start > 1 && (
+                        <>
+                          <motion.button
+                            type="button"
+                            onClick={() => {
+                              setCurrentPage(1);
+                              window.scrollTo({ top: 350, behavior: 'smooth' });
+                            }}
+                            className={`w-7 h-7 sm:w-8.5 sm:h-8.5 flex items-center justify-center font-bold font-sans transition-all border text-slate-600 border-slate-200 hover:border-slate-400 hover:bg-slate-50 cursor-pointer`}
+                          >
+                            1
+                          </motion.button>
+                          {start > 2 && <span className="px-1 text-slate-400 select-none">...</span>}
+                        </>
+                      )}
+                      
+                      {pages.map((pageNum) => (
+                        <motion.button
+                          key={pageNum}
+                          type="button"
+                          onClick={() => {
+                            setCurrentPage(pageNum);
+                            window.scrollTo({ top: 350, behavior: 'smooth' });
+                          }}
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          className={`w-7 h-7 sm:w-8.5 sm:h-8.5 flex items-center justify-center font-bold font-sans transition-all border ${
+                            currentPage === pageNum
+                              ? 'bg-[#005fa9] border-[#005fa9] text-white'
+                              : 'text-slate-600 border-slate-200 hover:border-slate-400 hover:bg-slate-50 cursor-pointer'
+                          }`}
+                        >
+                          {pageNum}
+                        </motion.button>
+                      ))}
+
+                      {end < totalPages && (
+                        <>
+                          {end < totalPages - 1 && <span className="px-1 text-slate-400 select-none">...</span>}
+                          <motion.button
+                            type="button"
+                            onClick={() => {
+                              setCurrentPage(totalPages);
+                              window.scrollTo({ top: 350, behavior: 'smooth' });
+                            }}
+                            className={`w-7 h-7 sm:w-8.5 sm:h-8.5 flex items-center justify-center font-bold font-sans transition-all border text-slate-600 border-slate-200 hover:border-slate-400 hover:bg-slate-50 cursor-pointer`}
+                          >
+                            {totalPages}
+                          </motion.button>
+                        </>
+                      )}
+                    </>
+                  );
+                })()}
 
                 {/* NEXT > */}
                 <motion.button
@@ -1211,14 +1267,14 @@ export default function ProductCatalog({ onAddToCart, cartItems }: ProductCatalo
                   disabled={currentPage === totalPages}
                   whileHover={currentPage !== totalPages ? { scale: 1.05 } : {}}
                   whileTap={currentPage !== totalPages ? { scale: 0.95 } : {}}
-                  className={`flex items-center justify-center p-2 border transition-all ${
+                  className={`flex items-center justify-center p-1.5 sm:p-2 border transition-all ${
                     currentPage === totalPages
                       ? 'text-slate-300 border-slate-100 cursor-not-allowed bg-slate-50/50'
                       : 'text-[#005fa9] border-slate-200 hover:border-[#005fa9] hover:bg-slate-50 cursor-pointer'
                   }`}
                   title="Next Page"
                 >
-                  <ChevronRight className="h-3.5 w-3.5" />
+                  <ChevronRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                 </motion.button>
 
                 {/* LAST */}
@@ -1231,13 +1287,15 @@ export default function ProductCatalog({ onAddToCart, cartItems }: ProductCatalo
                   disabled={currentPage === totalPages}
                   whileHover={currentPage !== totalPages ? { scale: 1.05 } : {}}
                   whileTap={currentPage !== totalPages ? { scale: 0.95 } : {}}
-                  className={`px-3 py-2 uppercase font-extrabold tracking-widest rounded-none border transition-all ${
+                  className={`px-2 py-1.5 sm:px-3 sm:py-2 flex items-center justify-center uppercase font-extrabold tracking-widest rounded-none border transition-all ${
                     currentPage === totalPages
                       ? 'text-slate-300 border-slate-100 cursor-not-allowed bg-slate-50/50'
                       : 'text-[#005fa9] border-slate-200 hover:border-[#005fa9] hover:bg-slate-50 cursor-pointer'
                   }`}
+                  title="Last Page"
                 >
-                  Last
+                  <span className="hidden sm:inline">Last</span>
+                  <span className="inline sm:hidden text-xs font-sans font-bold">&raquo;</span>
                 </motion.button>
               </div>
             </div>
