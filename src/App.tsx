@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Product, CartItem, WholesaleInquiry } from './types';
+import { WHOLESALE_PRODUCTS } from './data/products';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import ProductCatalog from './components/ProductCatalog';
@@ -1213,7 +1214,6 @@ function CategoryRouteRenderer({ path, onNavigate, onAddToCart, cartItems }: Cat
 
   // Find related components from mock databases for dynamic products list (Image 2 style)
   // To keep it 100% robust, if the custom filtered list doesn't yield anything we pull standard items
-  const { WHOLESALE_PRODUCTS } = require('./data/products');
   let filteredProducts: Product[] = WHOLESALE_PRODUCTS.filter((p: Product) => 
     categoryProductsFilter.includes(p.category) || (p.subType && categoryProductsFilter.some(filter => p.subType?.toLowerCase().includes(filter.toLowerCase())))
   );
