@@ -7,3 +7,165 @@
   --font-display: "Space Grotesk", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
+
+/* NATIVE DARK MODE & SYSTEM OVERRIDES */
+/* The entire website is styled in gorgeous high-contrast blue and black, completely eliminating white backgrounds */
+html {
+  color-scheme: dark;
+}
+
+body,
+#root,
+.min-h-screen,
+.bg-slate-50,
+.bg-neutral-50,
+.bg-slate-100/50,
+.bg-slate-50/50 {
+  background-color: #000000 !important;
+  color: #f1f5f9 !important;
+}
+
+/* Card panels, content blocks, and table cells */
+.bg-white,
+.bg-slate-100,
+.bg-neutral-100,
+[class*="bg-white/80"] {
+  background-color: #0c0c0c !important;
+}
+
+/* Interactive elements hover cards */
+.hover\:bg-white:hover,
+.hover\:bg-slate-50:hover,
+.hover\:bg-neutral-50:hover,
+.group:hover {
+  background-color: #121212 !important;
+}
+
+/* Slate elements, table stripes, and inner backgrounds */
+.bg-slate-50\/50,
+.bg-slate-50,
+tr:nth-child(even),
+.odd\:bg-white:nth-child(odd),
+.even\:bg-slate-50\/50:nth-child(even) {
+  background-color: #050505 !important;
+}
+
+/* Primary Headlines, Titles, Bold Text, and Captions */
+.text-slate-900,
+.text-slate-950,
+.text-neutral-900,
+.text-slate-800,
+.text-neutral-800,
+.text-slate-900\/90,
+h1, h2, h3, h4, h5, h6 {
+  color: #ffffff !important;
+}
+
+/* Paragraphs and descriptive copy */
+.text-slate-700,
+.text-neutral-700,
+.text-slate-600,
+.text-neutral-600 {
+  color: #e2e8f0 !important;
+}
+
+/* Secondary muted elements, annotations, and timestamps */
+.text-slate-500,
+.text-neutral-500,
+.text-slate-400 {
+  color: #94a3b8 !important;
+}
+
+/* Borders, Dividers, Lines, and Grids */
+.border-slate-200,
+.border-slate-100,
+.border-slate-300,
+.border-neutral-200,
+.border-slate-150,
+.border-slate-250,
+.border-slate-200\/80,
+.divide-slate-200 > * + *,
+.divide-y > * + *,
+.border-slate-300\/80 {
+  border-color: #1f2937 !important;
+}
+
+/* Lucide Icon stroke adjustments for visibility */
+svg:not(.text-\[\#E31C1C\]):not(.text-emerald-500):not(.text-blue-500):not(.text-amber-500):not(.text-red-500):not(.text-emerald-600) {
+  stroke: #ffffff !important;
+}
+
+/* Inputs, Textareas, Select elements, and Option tags */
+input,
+textarea,
+select {
+  background-color: #121212 !important;
+  color: #ffffff !important;
+  border-color: #334155 !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #64748b !important;
+}
+
+/* Sitelinks panel and highlights with a modern translucent dark blue */
+.bg-\[\#005fa9\]\/5,
+.bg-blue-50\/50 {
+  background-color: rgba(59, 130, 246, 0.08) !important;
+  border-color: rgba(59, 130, 246, 0.25) !important;
+}
+
+/* Improve brand blue link colors for high readability on pure black */
+.text-\[\#005fa9\],
+.text-blue-600 {
+  color: #38bdf8 !important; /* light sky blue */
+}
+
+.hover\:text-\[\#005fa9\]:hover,
+.hover\:text-blue-700:hover {
+  color: #7dd3fc !important;
+}
+
+.hover\:border-\[\#005fa9\]:hover {
+  border-color: #38bdf8 !important;
+}
+
+/* Specific buttons and interactive cards */
+.bg-slate-50.hover\:bg-white:hover {
+  background-color: #18181b !important;
+}
+
+/* CRM B2B inquiry tags status colors under dark theme */
+.text-emerald-800 {
+  color: #34d399 !important;
+}
+.bg-emerald-50 {
+  background-color: rgba(16, 185, 129, 0.12) !important;
+}
+.text-blue-800 {
+  color: #60a5fa !important;
+}
+.bg-blue-50 {
+  background-color: rgba(59, 130, 246, 0.12) !important;
+}
+.text-amber-800 {
+  color: #fbbf24 !important;
+}
+.bg-amber-50 {
+  background-color: rgba(245, 158, 11, 0.12) !important;
+}
+.text-rose-800 {
+  color: #f87171 !important;
+}
+.bg-rose-50 {
+  background-color: rgba(239, 68, 68, 0.12) !important;
+}
+
+/* Adjustments for shadow/glow rings */
+.shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.8) !important;
+}
+.shadow-md {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.9) !important;
+}

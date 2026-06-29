@@ -92,6 +92,20 @@ export default function App() {
   const [visitorIp, setVisitorIp] = useState<string>('Detecting...');
   const [visitorLocation, setVisitorLocation] = useState<string>('Ahmedabad, India (Default)');
 
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
+  useEffect(() => {
+    try {
+      document.documentElement.classList.add('dark');
+      document.documentElement.style.colorScheme = 'dark';
+      localStorage.setItem('mukesh_trading_theme', 'dark');
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
+
+  const toggleDarkMode = () => {};
+
   useEffect(() => {
     const detectIp = async () => {
       try {
@@ -378,6 +392,8 @@ export default function App() {
       <Header
         currentPath={currentPath}
         onNavigate={(path) => navigateTo(path)}
+        isDarkMode={isDarkMode}
+        onToggleDarkMode={toggleDarkMode}
       />
 
       {/* RENDER INJECTABLE HEADER JSON-LD SCHEMA BLOCKS */}

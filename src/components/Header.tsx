@@ -1,13 +1,15 @@
 import { useState } from 'react';
-import { Menu, X, ShoppingCart, Inbox, Phone, Search, FileText, Cpu, Info } from 'lucide-react';
+import { Menu, X, ShoppingCart, Inbox, Phone, Search, FileText, Cpu, Info, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface HeaderProps {
   currentPath: string;
   onNavigate: (path: string) => void;
+  isDarkMode?: boolean;
+  onToggleDarkMode?: () => void;
 }
 
-export default function Header({ currentPath, onNavigate }: HeaderProps) {
+export default function Header({ currentPath, onNavigate, isDarkMode, onToggleDarkMode }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Complete list matching the exact navigation with clean URL structures
@@ -165,7 +167,7 @@ export default function Header({ currentPath, onNavigate }: HeaderProps) {
             id="mobile-menu-toggle"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             whileTap={{ scale: 0.9 }}
-            className="flex items-center justify-center px-4 text-neutral-300 md:hidden hover:text-white"
+            className="flex items-center justify-center px-4 text-neutral-300 md:hidden hover:text-white border-l border-neutral-800"
           >
             {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </motion.button>
