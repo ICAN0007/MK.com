@@ -416,7 +416,7 @@ export default function ProductCatalog({ onAddToCart, cartItems, onNavigate }: P
   const activeGidcStats = GIDC_TRANSIT_DATA.find(z => z.zone === selectedGidcZone) || GIDC_TRANSIT_DATA[0];
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 bg-[#FFFFFF]" id="wholesale-catalog-section">
+    <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 bg-white" id="wholesale-catalog-section">
       
       {/* SECTION HEADER */}
       <div className="md:flex md:items-end md:justify-between mb-8">
@@ -1005,7 +1005,7 @@ export default function ProductCatalog({ onAddToCart, cartItems, onNavigate }: P
                     whileHover={{ y: -6, borderColor: '#005fa9', boxShadow: "0 10px 25px -5px rgba(0,0,0,0.06)" }}
                     whileTap={{ scale: 0.99 }}
                     transition={{ type: "spring", stiffness: 350, damping: 25 }}
-                    className="flex flex-col rounded-none border border-slate-200 bg-[#FFFFFF] p-6 relative text-left group cursor-pointer transition-all duration-300 shadow-xs hover:shadow-md"
+                    className="flex flex-col rounded-none border border-slate-200 bg-white p-6 relative text-left group cursor-pointer transition-all duration-300 shadow-xs hover:shadow-md"
                   >
                   {/* SKU Badge & Availability */}
                   <div className="flex justify-between items-center mb-4">

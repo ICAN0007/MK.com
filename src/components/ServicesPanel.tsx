@@ -192,7 +192,7 @@ export default function ServicesPanel({ onCatalogClick, onDealerFormFocus }: Ser
       </section>
 
       {/* DETAILED TECHNICAL SERVICES */}
-      <section className="bg-[#FFFFFF] py-20 sm:py-24 border-b border-slate-100">
+      <section className="bg-white py-20 sm:py-24 border-b border-slate-100">
         <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
           
           <div className="mx-auto max-w-3xl text-center">
@@ -220,7 +220,7 @@ export default function ServicesPanel({ onCatalogClick, onDealerFormFocus }: Ser
                     whileHover={{ scale: 1.02, borderColor: '#005fa9', boxShadow: "0 10px 25px -5px rgba(0,0,0,0.04)" }}
                     whileTap={{ scale: 0.98 }}
                     transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                    className="rounded-none border border-slate-100 bg-[#FFFFFF] p-6 flex items-start space-x-4 transition-colors text-left cursor-pointer"
+                    className="rounded-none border border-slate-100 bg-white p-6 flex items-start space-x-4 transition-colors text-left cursor-pointer"
                   >
                     <div className="flex-shrink-0 rounded-none bg-slate-50 border border-slate-150 p-3 text-slate-900">
                       <Icon className="h-5 w-5" />
@@ -251,7 +251,7 @@ export default function ServicesPanel({ onCatalogClick, onDealerFormFocus }: Ser
                 onClick={onDealerFormFocus}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="mt-4 md:mt-0 text-[10px] uppercase tracking-widest font-bold bg-[#FFFFFF] hover:bg-slate-100 text-slate-950 px-6 py-4 rounded-none flex items-center justify-center space-x-1 cursor-pointer transition-colors"
+                className="mt-4 md:mt-0 text-[10px] uppercase tracking-widest font-bold bg-[#005fa9] hover:bg-[#004d8a] text-white px-6 py-4 rounded-none flex items-center justify-center space-x-1 cursor-pointer transition-colors"
               >
                 <span>Apply for Dealership Now</span>
                 <ChevronRight className="h-3.5 w-3.5" />
@@ -283,7 +283,7 @@ export default function ServicesPanel({ onCatalogClick, onDealerFormFocus }: Ser
           </div>
 
           {/* PHYSICAL CONTACT INFORMATION & DEPOTS */}
-          <div className="mx-auto mt-24 max-w-5xl rounded-none border border-slate-100 bg-[#FFFFFF] p-6 md:p-8">
+          <div className="mx-auto mt-24 max-w-5xl rounded-none border border-slate-100 bg-white p-6 md:p-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left divide-y md:divide-y-0 md:divide-x divide-slate-100">
               
               <div className="pt-4 md:pt-0 md:pr-4" id="depot-info-box">
