@@ -3,7 +3,6 @@ import { Search, Info, ShoppingBag, ArrowUpRight, Check, AlertCircle, X, ZoomIn,
 import { Product, CartItem } from '../types';
 import { WHOLESALE_PRODUCTS, TRADING_CATEGORIES } from '../data/products';
 import { motion, AnimatePresence } from 'motion/react';
-import AdSenseInFeed from './AdSenseInFeed';
 
 // B2B Technical Conversion Constant Database
 const MESH_CONVERSIONS = [
@@ -1228,10 +1227,6 @@ export default function ProductCatalog({ onAddToCart, cartItems, onNavigate }: P
                     </AnimatePresence>
                   </div>
                 </motion.div>
-                {/* Insert AdSense in-feed native ads inside the product lists */}
-                {index === 2 && (
-                  <AdSenseInFeed className="sm:col-span-1 h-full" />
-                )}
               </React.Fragment>
               );
             })}
