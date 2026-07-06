@@ -1,0 +1,41 @@
+<?php
+
+// Get visitor IP address
+function getVisitorIP() {
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+        return $_SERVER['HTTP_CLIENT_IP'];
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        return $_SERVER['HTTP_X_FORWARDED_FOR'];
+    } else {
+        return $_SERVER['REMOTE_ADDR'];
+    }
+}
+
+$ip = getVisitorIP();
+$userAgent = $_SERVER['HTTP_USER_AGENT'];
+$date = date("Y-m-d H:i:s");
+
+// Optional: Get country using free API
+$details = json_decode(file_get_contents("http://ip-api.com/json/$ip"));
+
+$country = $details->country ?? "Unknown";
+$city = $details->city ?? "Unknown";
+
+$to = "bhavikhalai9023@gmail.com";   // 👈 PUT YOUR EMAIL HERE
+$subject = "New Website Visitor - MukeshTrading";
+
+$message = "
+New Visitor Alert:
+
+IP Address: $ip
+Country: $country
+City: $city
+Date: $date
+Browser: $userAgent
+";
+
+$headers = "From: notifier@bhavikhalai9023.com";
+
+mail($to, $subject, $message, $headers);
+
+?>

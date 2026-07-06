@@ -12,7 +12,8 @@ import {
   ShieldCheck,
   Calendar,
   MapPin,
-  Clock
+  Clock,
+  ExternalLink
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -300,6 +301,17 @@ export default function ServicesPanel({ onCatalogClick, onDealerFormFocus }: Ser
                 <p className="text-[11px] text-slate-500 mt-2 font-sans border-t border-slate-100 pt-2" lang="gu">
                   ગોડાઉન : જી-૪, અભિષેક ઈન્ડસ્ટ્રીયલ એસ્ટેટ, હરિપુરા બસ સ્ટેન્ડ સામે, સિવિલ રોડ, અસારવા, અમદાવાદ.
                 </p>
+                <div className="mt-3">
+                  <a 
+                    href="https://maps.google.com/?q=MUKESH+TRADING+CO.+Abhishek+Industrial+Estate+Asarwa+Ahmedabad+Gujarat+380016"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center space-x-1 text-[10px] font-extrabold uppercase tracking-widest text-[#005fa9] hover:text-[#004d8a] transition-colors"
+                  >
+                    <span>Open in Google Maps</span>
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
               </div>
 
               <div className="pt-6 md:pt-0 md:px-6" id="comms-info-box">

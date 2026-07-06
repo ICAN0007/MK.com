@@ -27,9 +27,33 @@ export default function Header({ currentPath, onNavigate, isDarkMode, onToggleDa
   };
 
   const isTabActive = (path: string) => {
-    if (path === '/' && currentPath === '/') return true;
-    if (path !== '/' && currentPath === path) return true;
-    return false;
+    // Extract base path without query parameters, trailing slashes, or hash fragments
+    const cleanCurrent = currentPath.split('?')[0].split('#')[0].replace(/\/$/, '') || '/';
+    const cleanPath = path.split('?')[0].split('#')[0].replace(/\/$/, '') || '/';
+
+    if (cleanPath === '/') {
+      return cleanCurrent === '/';
+    }
+
+    if (cleanPath === '/products') {
+      // Highlight "Products" if current path is products or any product category sub-page
+      const productSubPaths = [
+        '/products',
+        '/wire-mesh',
+        '/wire-netting',
+        '/perforated-sheets',
+        '/nylon-bolting-cloth',
+        '/stainless-steel-mesh',
+        '/industrial-filters',
+        '/vibrating-screens',
+        '/screening-equipment',
+        '/conveyor-belts',
+        '/elevator-buckets'
+      ];
+      return productSubPaths.includes(cleanCurrent);
+    }
+
+    return cleanCurrent === cleanPath;
   };
 
   return (

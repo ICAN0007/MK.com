@@ -997,6 +997,18 @@ export default function App() {
                           <Clock className="h-4 w-4 text-white" />
                           <span>Mon &mdash; Sat: 09:00 AM &mdash; 07:00 PM IST (Sundays Closed)</span>
                         </div>
+
+                        <div className="pt-4 border-t border-slate-800">
+                          <a 
+                            href="https://maps.google.com/?q=MUKESH+TRADING+CO.+Abhishek+Industrial+Estate+Asarwa+Ahmedabad+Gujarat+380016"
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center space-x-1.5 text-[11px] font-extrabold uppercase tracking-widest text-[#4fa7eb] hover:text-[#005fa9] transition-colors"
+                          >
+                            <span>Open in Google Maps</span>
+                            <ExternalLink className="h-3.5 w-3.5" />
+                          </a>
+                        </div>
                       </div>
                     </div>
 
@@ -1049,17 +1061,41 @@ export default function App() {
                     </div>
 
                     {/* Highly Professional Google Maps Iframe Embed of Asarwa high compatibility coords */}
-                    <div className="border border-slate-200 overflow-hidden h-[260px] relative bg-slate-150">
-                      <iframe 
-                        title="Mukesh Trading Co. Location Map"
-                        src="https://www.google.com/maps/embed?pb=!11m18!1m12!1m3!1d117512.44111306385!2d72.5019232876694!3d23.04169229891823!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e869766904dbf%3A0x6bba3bc2f55819df!2sAsarwa%2C%20Ahmedabad%2C%20Gujarat!5e0!3m2!1sen!2sin!4v1714521012356!5m2!1sen!2sin"
-                        width="100%" 
-                        height="100%" 
-                        style={{ border: 0 }} 
-                        allowFullScreen={false} 
-                        loading="lazy" 
-                        referrerPolicy="no-referrer-when-downgrade"
-                      />
+                    <div className="space-y-3">
+                      <div className="border border-slate-200 overflow-hidden h-[260px] relative bg-slate-150 group shadow-xs hover:shadow-md transition-shadow duration-300">
+                        <iframe 
+                          title="Mukesh Trading Co. Location Map"
+                          src="https://maps.google.com/maps?q=MUKESH+TRADING+CO.+Abhishek+Industrial+Estate+Asarwa+Ahmedabad+Gujarat+380016&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                          width="100%" 
+                          height="100%" 
+                          style={{ border: 0 }} 
+                          allowFullScreen={false} 
+                          loading="lazy" 
+                          referrerPolicy="no-referrer-when-downgrade"
+                        />
+                        {/* Interactive Clickable Overlay to directly open exact Google Maps location */}
+                        <a 
+                          href="https://maps.google.com/?q=MUKESH+TRADING+CO.+Abhishek+Industrial+Estate+Asarwa+Ahmedabad+Gujarat+380016"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="absolute inset-0 bg-black/0 hover:bg-black/5 transition-colors flex items-start justify-start p-3 z-10 cursor-pointer"
+                          title="Click anywhere to open Mukesh Trading Co. in Google Maps"
+                        >
+                          <div className="bg-white text-slate-900 px-4 py-2 shadow-lg border border-slate-200/80 flex items-center space-x-2 text-xs font-bold uppercase tracking-wider rounded-md hover:bg-[#005fa9] hover:text-white hover:border-[#005fa9] transition-all transform hover:scale-[1.03] duration-200">
+                            <span>Open in Maps</span>
+                            <ExternalLink className="h-3.5 w-3.5 text-slate-500 group-hover:text-white" />
+                          </div>
+                        </a>
+                      </div>
+                      <a 
+                        href="https://maps.google.com/?q=MUKESH+TRADING+CO.+Abhishek+Industrial+Estate+Asarwa+Ahmedabad+Gujarat+380016"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center justify-center space-x-2 w-full border border-slate-300 hover:border-[#005fa9] text-slate-800 hover:text-[#005fa9] p-3 text-xs font-bold uppercase tracking-wider transition-all bg-slate-50"
+                      >
+                        <MapPin className="h-4 w-4" />
+                        <span>Open in Google Maps</span>
+                      </a>
                     </div>
 
                   </div>
