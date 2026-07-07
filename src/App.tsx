@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Product, CartItem, WholesaleInquiry } from './types';
 import { WHOLESALE_PRODUCTS } from './data/products';
+import { trackVisitor } from './lib/supabase';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import ProductCatalog from './components/ProductCatalog';
@@ -108,17 +109,26 @@ export default function App() {
 
   useEffect(() => {
     const detectIp = async () => {
+      let finalIp = 'Local/Shielded';
+      let finalLoc = 'Client Proxy (Identified)';
+
       try {
         const res = await fetch('https://ipapi.co/json/');
         if (res.ok) {
           const data = await res.json();
           if (data.ip) {
-            setVisitorIp(data.ip);
+            finalIp = data.ip;
             let locParts = [];
             if (data.city) locParts.push(data.city);
             if (data.region) locParts.push(data.region);
             if (data.country_name) locParts.push(data.country_name);
-            setVisitorLocation(locParts.join(', ') || 'India');
+            finalLoc = locParts.join(', ') || 'India';
+            
+            setVisitorIp(finalIp);
+            setVisitorLocation(finalLoc);
+            
+            // Log to Supabase
+            trackVisitor(finalIp, finalLoc, navigator.userAgent);
             return;
           }
         }
@@ -131,15 +141,24 @@ export default function App() {
         if (res.ok) {
           const data = await res.json();
           if (data.ip) {
-            setVisitorIp(data.ip);
-            setVisitorLocation('India (Identified)');
+            finalIp = data.ip;
+            finalLoc = 'India (Identified)';
+            setVisitorIp(finalIp);
+            setVisitorLocation(finalLoc);
+            
+            // Log to Supabase
+            trackVisitor(finalIp, finalLoc, navigator.userAgent);
+            return;
           }
         }
       } catch (err) {
         console.error("All client-side IP API requests failed (Adblock/Offline)", err);
-        setVisitorIp('Local/Shielded');
-        setVisitorLocation('Client Proxy (Identified)');
       }
+
+      // Fallback
+      setVisitorIp(finalIp);
+      setVisitorLocation(finalLoc);
+      trackVisitor(finalIp, finalLoc, navigator.userAgent);
     };
 
     detectIp();

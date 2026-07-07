@@ -1,8 +1,9 @@
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, useEffect } from 'react';
 import { WholesaleInquiry } from '../types';
+import { getVisitors, isSupabaseConfigured } from '../lib/supabase';
 import { 
   AlertCircle, CheckCircle2, Download, Search, Filter, Mail, Phone, MapPin, 
-  Send, HelpCircle, FileText, Check, ShieldCheck, Copy, ExternalLink, Clock 
+  Send, HelpCircle, FileText, Check, ShieldCheck, Copy, ExternalLink, Clock, Settings 
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -25,6 +26,36 @@ export default function InquiriesDashboard({
 }: InquiriesDashboardProps) {
   
   // Custom contact form states (Image 3 layout)
+  const [supabaseVisitors, setSupabaseVisitors] = useState<any[]>([]);
+  const [isLoadingSupabase, setIsLoadingSupabase] = useState(false);
+  const [supabaseError, setSupabaseError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    const fetchVisitors = async () => {
+      if (!isSupabaseConfigured) return;
+      try {
+        if (active) setIsLoadingSupabase(true);
+        const data = await getVisitors();
+        if (active) {
+          setSupabaseVisitors(data);
+          setSupabaseError(null);
+        }
+      } catch (err: any) {
+        if (active) setSupabaseError(err?.message || 'Error connecting to database');
+      } finally {
+        if (active) setIsLoadingSupabase(false);
+      }
+    };
+
+    fetchVisitors();
+    const interval = setInterval(fetchVisitors, 20000); // refresh every 20 seconds
+    return () => {
+      active = false;
+      clearInterval(interval);
+    };
+  }, []);
+
   const [enquiryType, setEnquiryType] = useState('Sample Request');
   const [companyName, setCompanyName] = useState(() => localStorage.getItem('mtc_company_name') || '');
   const [deliveryAddress, setDeliveryAddress] = useState(() => localStorage.getItem('mtc_delivery_address') || '');
@@ -853,6 +884,213 @@ export default function InquiriesDashboard({
               No active inquiries filed. File your sourcing query above to log visitor connection metadata!
             </div>
           )}
+
+          {/* SUPABASE LIVE VISITOR LOGS TRACKER MODULE */}
+          <div className="mt-12 pt-10 border-t border-neutral-850" id="supabase-live-visitor-tracking-card">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+              <div>
+                <span className="text-[10px] font-black uppercase text-[#005fa9] tracking-[0.25em] block mb-1">
+                  Database Analytics integration
+                </span>
+                <h4 className="text-lg font-light text-white uppercase tracking-wider">
+                  Supabase Live <span className="font-bold text-[#3ba2ff]">Visitor Logs</span>
+                </h4>
+              </div>
+              <div>
+                {isSupabaseConfigured ? (
+                  <div className="inline-flex items-center space-x-2 bg-emerald-950/30 border border-emerald-900/50 text-emerald-400 px-3 py-1.5 rounded text-[11px] font-mono font-bold uppercase tracking-wider">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <span>Supabase Connected</span>
+                  </div>
+                ) : (
+                  <div className="inline-flex items-center space-x-2 bg-amber-950/30 border border-amber-900/50 text-amber-400 px-3 py-1.5 rounded text-[11px] font-mono font-bold uppercase tracking-wider">
+                    <AlertCircle className="w-3.5 h-3.5" />
+                    <span>Supabase Pending Setup</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {!isSupabaseConfigured ? (
+              <div className="bg-[#161616] border border-dashed border-neutral-800 p-6 md:p-8 text-neutral-300 rounded-none font-sans space-y-5 text-left">
+                <div className="flex items-start space-x-4">
+                  <div className="bg-[#003d73] text-white p-2.5 rounded-full mt-1">
+                    <Settings className="w-5 h-5 text-[#3ba2ff]" />
+                  </div>
+                  <div className="space-y-2">
+                    <h5 className="text-white font-bold text-sm uppercase tracking-wide">How to connect your Supabase project:</h5>
+                    <p className="text-xs text-neutral-400 leading-relaxed">
+                      This application is pre-built to log visitor details (IP, country, city, date, and browser device) automatically to your Supabase table. To activate this integration, configure these variables in the <strong>Secrets panel</strong> or settings in AI Studio:
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-2 pt-2">
+                  <div className="bg-[#111] p-4 border border-neutral-850 space-y-2 font-mono text-[11px]">
+                    <span className="text-neutral-500 text-[10px] uppercase font-bold block">1. Key Name</span>
+                    <div className="text-emerald-400 font-bold select-all">VITE_SUPABASE_URL</div>
+                    <span className="text-neutral-500 text-[10px] block mt-1 font-sans">Value: Your Supabase Project API URL (e.g. <code>https://your-proj.supabase.co</code>)</span>
+                  </div>
+
+                  <div className="bg-[#111] p-4 border border-neutral-850 space-y-2 font-mono text-[11px]">
+                    <span className="text-neutral-500 text-[10px] uppercase font-bold block">2. Key Name</span>
+                    <div className="text-emerald-400 font-bold select-all">VITE_SUPABASE_ANON_KEY</div>
+                    <span className="text-neutral-500 text-[10px] block mt-1 font-sans">Value: Your Supabase Project public anon key</span>
+                  </div>
+                </div>
+
+                <div className="bg-[#1a2c42]/30 border border-[#005fa9]/30 p-4 font-sans text-xs text-neutral-300 leading-relaxed space-y-2">
+                  <h6 className="text-white font-bold uppercase text-[11px] tracking-wide flex items-center gap-1.5">
+                    <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                    Supabase Database Schema Setup:
+                  </h6>
+                  <p className="text-neutral-400">
+                    Make sure you have created a table named <strong><code>visitors</code></strong> in your Supabase database editor with your exact schema configuration:
+                  </p>
+                  <pre className="bg-[#111] p-3 text-[10.5px] text-neutral-300 border border-neutral-850 font-mono overflow-x-auto mt-2 rounded">
+{`CREATE TABLE public.visitors (
+  id bigint GENERATED BY DEFAULT AS IDENTITY NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  ip text NULL,
+  country text NULL,
+  city text NULL,
+  browser text NULL,
+  device text NULL,
+  os text NULL,
+  user_agent text NULL,
+  referrer text NULL,
+  CONSTRAINT visitors_pkey PRIMARY KEY (id)
+) TABLESPACE pg_default;`}
+                  </pre>
+                  <p className="text-neutral-400 text-[11px] mt-2">
+                    💡 <em>Row Level Security (RLS):</em> For testing, ensure your table has an insert policy allowing public inserts, or temporarily disable RLS so client visits can be logged seamlessly.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="bg-[#161616] border border-neutral-850 overflow-hidden" id="supabase-live-visitor-table-wrapper">
+                <div className="p-4 bg-[#1b1b1b] border-b border-neutral-850 flex justify-between items-center text-xs font-sans">
+                  <span className="text-neutral-400 text-left">Connected Project: <strong className="text-white font-mono">{import.meta.env.VITE_SUPABASE_URL?.replace('https://', '').split('.')[0]}</strong></span>
+                  <button 
+                    onClick={async () => {
+                      setIsLoadingSupabase(true);
+                      try {
+                        const data = await getVisitors();
+                        setSupabaseVisitors(data);
+                        setSupabaseError(null);
+                      } catch (err: any) {
+                        setSupabaseError(err?.message || 'Error connecting to database');
+                      } finally {
+                        setIsLoadingSupabase(false);
+                      }
+                    }}
+                    disabled={isLoadingSupabase}
+                    className="cursor-pointer text-[#3ba2ff] hover:text-white transition-colors uppercase font-bold text-[10px] tracking-wider"
+                  >
+                    {isLoadingSupabase ? 'Refreshing...' : 'Refresh Logs ⟳'}
+                  </button>
+                </div>
+
+                {isLoadingSupabase && supabaseVisitors.length === 0 ? (
+                  <div className="text-center py-12 text-neutral-500 text-xs font-sans">
+                    Connecting and pulling live Supabase logs...
+                  </div>
+                ) : supabaseError ? (
+                  <div className="p-6 text-left border border-red-950/25 bg-red-950/10 space-y-4">
+                    <div className="text-red-400 text-xs font-mono font-bold flex items-center gap-2">
+                      <AlertCircle className="w-4 h-4 shrink-0 text-red-500" />
+                      <span>Supabase Error: {supabaseError}</span>
+                    </div>
+                    <div className="text-neutral-300 text-xs font-sans space-y-2 leading-relaxed">
+                      <p className="font-semibold text-white">💡 Why does this happen?</p>
+                      <p className="text-neutral-400">
+                        Supabase activates <strong>Row Level Security (RLS)</strong> by default on newly created tables. This prevents anonymous/public clients from inserting new rows until a permission policy is defined.
+                      </p>
+                      <p className="font-semibold text-white pt-1">🛠️ How to fix in 10 seconds:</p>
+                      <p className="text-neutral-400">
+                        Go to your <strong>Supabase Dashboard &gt; SQL Editor</strong>, paste either of these commands, and click <strong>Run</strong>:
+                      </p>
+                      
+                      <div className="space-y-3 pt-1">
+                        <div>
+                          <span className="text-[10px] text-amber-400 uppercase font-bold tracking-wider block mb-1">Option A: Disable RLS (Easiest for testing)</span>
+                          <pre className="bg-[#111] p-2 text-[10px] font-mono text-neutral-300 border border-neutral-800 rounded select-all">
+                            ALTER TABLE public.visitors DISABLE ROW LEVEL SECURITY;
+                          </pre>
+                        </div>
+                        
+                        <div>
+                          <span className="text-[10px] text-emerald-400 uppercase font-bold tracking-wider block mb-1">Option B: Add Public Access Policies (Recommended)</span>
+                          <pre className="bg-[#111] p-3 text-[10px] font-mono text-neutral-300 border border-neutral-800 rounded overflow-x-auto select-all">
+{`CREATE POLICY "Allow public inserts" ON public.visitors FOR INSERT WITH CHECK (true);
+CREATE POLICY "Allow public select" ON public.visitors FOR SELECT USING (true);`}
+                          </pre>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : supabaseVisitors.length === 0 ? (
+                  <div className="text-center py-12 text-neutral-400 text-xs font-sans space-y-2 text-left px-6">
+                    <p className="font-bold text-white">No visitor tracking logs found in Supabase.</p>
+                    <p className="text-neutral-500 text-[11px]">The system automatically records visits upon page load. Refresh this page to trigger your first visitor record!</p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto custom-scrollbar">
+                    <table className="w-full text-left text-xs font-sans border-collapse">
+                      <thead>
+                        <tr className="bg-[#1c1c1c] border-b border-neutral-850 text-neutral-400 font-bold uppercase text-[9.5px] tracking-wider">
+                          <th className="px-5 py-3">ID</th>
+                          <th className="px-5 py-3">Timestamp (Local)</th>
+                          <th className="px-5 py-3">IP Address</th>
+                          <th className="px-5 py-3">Location (City, Country)</th>
+                          <th className="px-5 py-3">Browser / OS Device Info</th>
+                          <th className="px-5 py-3">Referrer</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-neutral-850 font-mono">
+                        {supabaseVisitors.map((v, index) => (
+                          <tr key={v.id || index} className="hover:bg-[#1d1d1d] transition-colors text-neutral-300">
+                            <td className="px-5 py-3.5 text-neutral-500 font-bold text-[11px]">#{v.id}</td>
+                            <td className="px-5 py-3.5 text-xs font-sans">{v.created_at ? new Date(v.created_at).toLocaleString() : 'N/A'}</td>
+                            <td className="px-5 py-3.5 text-[#3ba2ff] font-bold select-all">{v.ip || 'Local/Shielded'}</td>
+                            <td className="px-5 py-3.5 font-sans">
+                              {v.city || v.country ? (
+                                <span className="flex items-center gap-1.5">
+                                  <MapPin className="w-3.5 h-3.5 text-neutral-500 animate-pulse" />
+                                  <span>{[v.city, v.country].filter(Boolean).join(', ') || 'India'}</span>
+                                </span>
+                              ) : (
+                                <span className="text-neutral-500">India</span>
+                              )}
+                            </td>
+                            <td className="px-5 py-3.5 font-sans text-xs text-neutral-300 truncate max-w-[220px]" title={v.user_agent || v.device}>
+                              <div className="font-medium text-white">{v.device || 'Web Visitor'}</div>
+                              {(v.browser || v.os) && (
+                                <div className="text-[10px] text-neutral-500 font-mono mt-0.5 flex gap-1 items-center">
+                                  {v.browser && <span className="bg-neutral-800 text-neutral-400 px-1 py-0.2 rounded text-[9px] font-bold">{v.browser}</span>}
+                                  {v.os && <span className="text-neutral-500">{v.os}</span>}
+                                </div>
+                              )}
+                            </td>
+                            <td className="px-5 py-3.5 font-sans text-xs text-neutral-400 truncate max-w-[150px]" title={v.referrer || 'Direct Visit'}>
+                              {v.referrer ? (
+                                <span className="text-neutral-400 text-[11px] truncate block select-all">{v.referrer}</span>
+                              ) : (
+                                <span className="text-neutral-600 italic text-[11px]">Direct Visit</span>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
 
         </div>
       </div>
