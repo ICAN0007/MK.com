@@ -1,8 +1,12 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Retrieve Supabase credentials from client-side environment variables
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+const supabaseUrlRaw = import.meta.env.VITE_SUPABASE_URL || '';
+const supabaseAnonKeyRaw = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+
+// Strip any accidental surrounding quotes from .env injection
+const supabaseUrl = supabaseUrlRaw.replace(/^['"]|['"]$/g, '').trim();
+const supabaseAnonKey = supabaseAnonKeyRaw.replace(/^['"]|['"]$/g, '').trim();
 
 export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
 
@@ -92,6 +96,12 @@ export async function trackVisitor(ipAddress: string, locationStr: string, userA
     }
 
     console.log('Successfully logged visitor to Supabase!', data);
+
+    // Dispatch a custom event to instantly notify any listening dashboard tables to refresh
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('supabase-visitor-tracked', { detail: data }));
+    }
+
     return { success: true, data };
   } catch (err) {
     console.error('Unexpected error while tracking visitor:', err);
@@ -104,20 +114,15 @@ export async function trackVisitor(ipAddress: string, locationStr: string, userA
  */
 export async function getVisitors() {
   if (!supabase) return [];
-  try {
-    const { data, error } = await supabase
-      .from('visitors')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(100);
-      
-    if (error) {
-      console.error('Error retrieving visitors from Supabase:', error);
-      return [];
-    }
-    return data || [];
-  } catch (err) {
-    console.error('Unexpected error retrieving visitors:', err);
-    return [];
+  const { data, error } = await supabase
+    .from('visitors')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(100);
+    
+  if (error) {
+    console.error('Error retrieving visitors from Supabase:', error);
+    throw error;
   }
+  return data || [];
 }

@@ -49,9 +49,23 @@ export default function InquiriesDashboard({
     };
 
     fetchVisitors();
+
+    const handleVisitorTracked = () => {
+      if (active) {
+        fetchVisitors();
+      }
+    };
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('supabase-visitor-tracked', handleVisitorTracked);
+    }
+
     const interval = setInterval(fetchVisitors, 20000); // refresh every 20 seconds
     return () => {
       active = false;
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('supabase-visitor-tracked', handleVisitorTracked);
+      }
       clearInterval(interval);
     };
   }, []);
