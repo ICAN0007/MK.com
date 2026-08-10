@@ -231,7 +231,7 @@ export default function App() {
     if (currentPath === '/products') {
       canonicalPath = window.location.pathname;
     }
-    let canonical = 'https://mukeshtrading.com' + canonicalPath;
+    let canonical = 'https://www.mukeshtrading.com' + canonicalPath;
 
     let pageSuffix = '';
     const pageMatch = window.location.pathname.match(/\/products\/page-?(\d+)/);
@@ -1565,47 +1565,15 @@ function CategoryRouteRenderer({ path, onNavigate, onAddToCart, cartItems }: Cat
   );
 }
 
-// INJECTABLE JSON-LD SCHEMAS
+// INJECTABLE JSON-LD SCHEMAS (LocalBusiness, Breadcrumbs, Navigation, FAQs)
 function SchemaMarkup({ currentPath }: { currentPath: string }) {
-  // Setup standard WebSite schema for Google Search Engine Site Name
-  const websiteSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Mukesh Trading Co.",
-    "alternateName": [
-      "Mukesh Trading Company",
-      "MUKESH TRADING CO.",
-      "Mukesh Trading"
-    ],
-    "url": "https://mukeshtrading.com/"
-  };
-
-  // Setup standard LocalBusiness and Organization
-  const orgSchema = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "@id": "https://mukeshtrading.com/#organization",
-    "name": "Mukesh Trading Co.",
-    "url": "https://mukeshtrading.com/",
-    "logo": "https://mukeshtrading.com/favicon.svg",
-    "foundingDate": "1975",
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "telephone": "+91-98792-11012",
-      "contactType": "sales",
-      "email": "mukeshtradingco16@gmail.com",
-      "areaServed": "IN",
-      "availableLanguage": ["en", "hi", "gu"]
-    }
-  };
-
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "@id": "https://mukeshtrading.com/#localbusiness",
+    "@id": "https://www.mukeshtrading.com/#localbusiness",
     "name": "Mukesh Trading Co.",
     "image": "https://i.ibb.co/fG9kDh3g/2f9eb394-1796-43d0-a38c-cb555323144c.png",
-    "url": "https://mukeshtrading.com/",
+    "url": "https://www.mukeshtrading.com/",
     "telephone": "+91-98792-11012",
     "email": "mukeshtradingco16@gmail.com",
     "address": {
@@ -1654,33 +1622,33 @@ function SchemaMarkup({ currentPath }: { currentPath: string }) {
     "@graph": [
       {
         "@type": "SiteNavigationElement",
-        "@id": "https://mukeshtrading.com/#nav-home",
+        "@id": "https://www.mukeshtrading.com/#nav-home",
         "name": "Home",
-        "url": "https://mukeshtrading.com/"
+        "url": "https://www.mukeshtrading.com/"
       },
       {
         "@type": "SiteNavigationElement",
-        "@id": "https://mukeshtrading.com/#nav-about",
+        "@id": "https://www.mukeshtrading.com/#nav-about",
         "name": "About Us",
-        "url": "https://mukeshtrading.com/about-us"
+        "url": "https://www.mukeshtrading.com/about-us"
       },
       {
         "@type": "SiteNavigationElement",
-        "@id": "https://mukeshtrading.com/#nav-products",
+        "@id": "https://www.mukeshtrading.com/#nav-products",
         "name": "Products",
-        "url": "https://mukeshtrading.com/products"
+        "url": "https://www.mukeshtrading.com/products"
       },
       {
         "@type": "SiteNavigationElement",
-        "@id": "https://mukeshtrading.com/#nav-industries",
+        "@id": "https://www.mukeshtrading.com/#nav-industries",
         "name": "Industries Served",
-        "url": "https://mukeshtrading.com/industries-served"
+        "url": "https://www.mukeshtrading.com/industries-served"
       },
       {
         "@type": "SiteNavigationElement",
-        "@id": "https://mukeshtrading.com/#nav-contact",
+        "@id": "https://www.mukeshtrading.com/#nav-contact",
         "name": "Contact Us",
-        "url": "https://mukeshtrading.com/contact-us"
+        "url": "https://www.mukeshtrading.com/contact-us"
       }
     ]
   };
@@ -1693,25 +1661,19 @@ function SchemaMarkup({ currentPath }: { currentPath: string }) {
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://mukeshtrading.com/"
+        "item": "https://www.mukeshtrading.com/"
       },
       currentPath !== '/' ? {
         "@type": "ListItem",
         "position": 2,
         "name": currentPath.replace('/', '').replace(/-/g, ' ').toUpperCase(),
-        "item": "https://mukeshtrading.com" + currentPath
+        "item": "https://www.mukeshtrading.com" + currentPath
       } : null
     ].filter(Boolean)
   };
 
   return (
     <>
-      <script type="application/ld+json">
-        {JSON.stringify(websiteSchema)}
-      </script>
-      <script type="application/ld+json">
-        {JSON.stringify(orgSchema)}
-      </script>
       <script type="application/ld+json">
         {JSON.stringify(localBusinessSchema)}
       </script>
