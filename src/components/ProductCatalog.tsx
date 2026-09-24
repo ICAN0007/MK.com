@@ -239,7 +239,7 @@ export default function ProductCatalog({ onAddToCart, cartItems, onNavigate }: P
         }
       }
     } catch (e) {
-      console.error(e);
+      console.warn(e);
     }
   }, [currentPage]);
 

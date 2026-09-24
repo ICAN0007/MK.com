@@ -7,9 +7,6 @@ import Hero from './components/Hero';
 import ProductCatalog from './components/ProductCatalog';
 import ServicesPanel from './components/ServicesPanel';
 import InquiriesDashboard from './components/InquiriesDashboard';
-import AdSenseBanner from './components/AdSenseBanner';
-import AdSenseMultiplex from './components/AdSenseMultiplex';
-import AdSenseDisplay from './components/AdSenseDisplay';
 import { 
   Building, Mail, Phone, Clock, ChevronRight, Check, MapPin, ExternalLink, 
   ArrowRight, ShieldCheck, HelpCircle, FileText, Compass, Settings, AlertCircle, ShoppingCart 
@@ -101,7 +98,7 @@ export default function App() {
       document.documentElement.style.colorScheme = 'dark';
       localStorage.setItem('mukesh_trading_theme', 'dark');
     } catch (e) {
-      console.error(e);
+      console.warn(e);
     }
   }, []);
 
@@ -152,7 +149,7 @@ export default function App() {
           }
         }
       } catch (err) {
-        console.error("All client-side IP API requests failed (Adblock/Offline)", err);
+        console.warn("All client-side IP API requests failed (Adblock/Offline)", err);
       }
 
       // Fallback
@@ -231,7 +228,7 @@ export default function App() {
     if (currentPath === '/products') {
       canonicalPath = window.location.pathname;
     }
-    let canonical = 'https://www.mukeshtrading.com' + canonicalPath;
+    let canonical = 'https://mukeshtrading.com' + canonicalPath;
 
     let pageSuffix = '';
     const pageMatch = window.location.pathname.match(/\/products\/page-?(\d+)/);
@@ -418,13 +415,6 @@ export default function App() {
       {/* RENDER INJECTABLE HEADER JSON-LD SCHEMA BLOCKS */}
       <SchemaMarkup currentPath={currentPath} />
 
-      {/* TOP HEADER LEADERBOARD AD - HIGH VIEWABILITY AND PREMIUM CPM */}
-      <div className="bg-white border-b border-slate-200 py-2 w-full">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <AdSenseBanner className="my-1 min-h-[90px]" />
-        </div>
-      </div>
-
       {/* CORE FRAMEWORK FOR SYSTEM ROUTING */}
       <main className="flex-1">
         <AnimatePresence mode="wait">
@@ -491,9 +481,6 @@ export default function App() {
                         {homeSEO.localGeoSection.content}
                       </p>
                     </div>
-
-                    {/* Middle Page Display Ad */}
-                    <AdSenseDisplay className="mt-16" />
 
                     {/* Direct shortcuts to the 6 category pages (satisfies linking & visual categories requirement) */}
                     <div className="mt-16 border-t border-slate-100 pt-16">
@@ -716,9 +703,6 @@ export default function App() {
                         ))}
                       </div>
 
-                      {/* Middle page Display Ad banner */}
-                      <AdSenseDisplay className="my-10" />
-
                       {/* Timeline Sections */}
                       <div className="space-y-12">
                         {aboutSEO.blocks.map((block, idx) => (
@@ -809,8 +793,6 @@ export default function App() {
                     });
                   }} 
                 />
-                {/* Horizontal ad banner */}
-                <AdSenseBanner />
               </div>
             </motion.div>
           )}
@@ -861,9 +843,6 @@ export default function App() {
                       }}
                     />
  
-                    {/* Horizontal ad banner */}
-                    <AdSenseBanner className="mt-8 pt-6 border-t border-slate-100" />
- 
                   </div>
                 </div>
               </section>
@@ -908,9 +887,6 @@ export default function App() {
                         </div>
                       ))}
                     </div>
-
-                    {/* Middle Page Display Ad */}
-                    <AdSenseDisplay className="my-12" />
 
                     {/* Engineering Mechanics formula */}
                     <div className="bg-slate-950 text-white p-6 sm:p-8 border-l-[6px] border-[#005fa9] text-left mt-12 rounded-none">
@@ -1148,11 +1124,6 @@ export default function App() {
 
         </AnimatePresence>
       </main>
-
-      {/* End of the page multiplex ads */}
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-2">
-        <AdSenseMultiplex />
-      </div>
 
       {/* FOOTER ACCORDING TO HIGH FIDELITY SPEC */}
       <footer className="bg-slate-950 text-slate-400 border-t border-slate-900" id="corporate-footer">
@@ -1565,15 +1536,47 @@ function CategoryRouteRenderer({ path, onNavigate, onAddToCart, cartItems }: Cat
   );
 }
 
-// INJECTABLE JSON-LD SCHEMAS (LocalBusiness, Breadcrumbs, Navigation, FAQs)
+// INJECTABLE JSON-LD SCHEMAS
 function SchemaMarkup({ currentPath }: { currentPath: string }) {
+  // Setup standard WebSite schema for Google Search Engine Site Name
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Mukesh Trading Co.",
+    "alternateName": [
+      "Mukesh Trading Company",
+      "MUKESH TRADING CO.",
+      "Mukesh Trading"
+    ],
+    "url": "https://mukeshtrading.com/"
+  };
+
+  // Setup standard LocalBusiness and Organization
+  const orgSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": "https://mukeshtrading.com/#organization",
+    "name": "Mukesh Trading Co.",
+    "url": "https://mukeshtrading.com/",
+    "logo": "https://mukeshtrading.com/favicon.svg",
+    "foundingDate": "1975",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+91-98792-11012",
+      "contactType": "sales",
+      "email": "mukeshtradingco16@gmail.com",
+      "areaServed": "IN",
+      "availableLanguage": ["en", "hi", "gu"]
+    }
+  };
+
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "@id": "https://www.mukeshtrading.com/#localbusiness",
+    "@id": "https://mukeshtrading.com/#localbusiness",
     "name": "Mukesh Trading Co.",
     "image": "https://i.ibb.co/fG9kDh3g/2f9eb394-1796-43d0-a38c-cb555323144c.png",
-    "url": "https://www.mukeshtrading.com/",
+    "url": "https://mukeshtrading.com/",
     "telephone": "+91-98792-11012",
     "email": "mukeshtradingco16@gmail.com",
     "address": {
@@ -1622,33 +1625,33 @@ function SchemaMarkup({ currentPath }: { currentPath: string }) {
     "@graph": [
       {
         "@type": "SiteNavigationElement",
-        "@id": "https://www.mukeshtrading.com/#nav-home",
+        "@id": "https://mukeshtrading.com/#nav-home",
         "name": "Home",
-        "url": "https://www.mukeshtrading.com/"
+        "url": "https://mukeshtrading.com/"
       },
       {
         "@type": "SiteNavigationElement",
-        "@id": "https://www.mukeshtrading.com/#nav-about",
+        "@id": "https://mukeshtrading.com/#nav-about",
         "name": "About Us",
-        "url": "https://www.mukeshtrading.com/about-us"
+        "url": "https://mukeshtrading.com/about-us"
       },
       {
         "@type": "SiteNavigationElement",
-        "@id": "https://www.mukeshtrading.com/#nav-products",
+        "@id": "https://mukeshtrading.com/#nav-products",
         "name": "Products",
-        "url": "https://www.mukeshtrading.com/products"
+        "url": "https://mukeshtrading.com/products"
       },
       {
         "@type": "SiteNavigationElement",
-        "@id": "https://www.mukeshtrading.com/#nav-industries",
+        "@id": "https://mukeshtrading.com/#nav-industries",
         "name": "Industries Served",
-        "url": "https://www.mukeshtrading.com/industries-served"
+        "url": "https://mukeshtrading.com/industries-served"
       },
       {
         "@type": "SiteNavigationElement",
-        "@id": "https://www.mukeshtrading.com/#nav-contact",
+        "@id": "https://mukeshtrading.com/#nav-contact",
         "name": "Contact Us",
-        "url": "https://www.mukeshtrading.com/contact-us"
+        "url": "https://mukeshtrading.com/contact-us"
       }
     ]
   };
@@ -1661,19 +1664,25 @@ function SchemaMarkup({ currentPath }: { currentPath: string }) {
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://www.mukeshtrading.com/"
+        "item": "https://mukeshtrading.com/"
       },
       currentPath !== '/' ? {
         "@type": "ListItem",
         "position": 2,
         "name": currentPath.replace('/', '').replace(/-/g, ' ').toUpperCase(),
-        "item": "https://www.mukeshtrading.com" + currentPath
+        "item": "https://mukeshtrading.com" + currentPath
       } : null
     ].filter(Boolean)
   };
 
   return (
     <>
+      <script type="application/ld+json">
+        {JSON.stringify(websiteSchema)}
+      </script>
+      <script type="application/ld+json">
+        {JSON.stringify(orgSchema)}
+      </script>
       <script type="application/ld+json">
         {JSON.stringify(localBusinessSchema)}
       </script>

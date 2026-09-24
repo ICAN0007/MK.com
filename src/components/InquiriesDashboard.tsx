@@ -33,7 +33,6 @@ export default function InquiriesDashboard({
   useEffect(() => {
     let active = true;
     const fetchVisitors = async () => {
-      if (!isSupabaseConfigured) return;
       try {
         if (active) setIsLoadingSupabase(true);
         const data = await getVisitors();
@@ -42,7 +41,7 @@ export default function InquiriesDashboard({
           setSupabaseError(null);
         }
       } catch (err: any) {
-        if (active) setSupabaseError(err?.message || 'Error connecting to database');
+        if (active) setSupabaseError(err?.message || 'Error loading visitor logs');
       } finally {
         if (active) setIsLoadingSupabase(false);
       }

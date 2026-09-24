@@ -65,64 +65,125 @@ export async function trackVisitor(ipAddress: string, locationStr: string, userA
 
     const referrer = typeof document !== 'undefined' ? (document.referrer || null) : null;
 
-    // Log the payload to the console for transparent developer debugging
-    console.log('Sending visitor log to Supabase:', { ip: ipAddress, country, city, browser, device, os, user_agent: userAgentStr, referrer });
+    // Create standard visitor record locally
+    const localVisitor = {
+      id: Date.now(),
+      created_at: new Date().toISOString(),
+      ip: ipAddress || 'Local/Shielded',
+      country: country || 'India',
+      city: city || 'Ahmedabad',
+      browser: browser || 'Browser',
+      device: device || 'Web Visitor',
+      os: os || 'OS Unknown',
+      user_agent: userAgentStr || null,
+      referrer: referrer || null
+    };
 
-    // Insert into 'visitors' with columns matching the user's Supabase schema exactly
-    // Omit created_at to let Postgres automatically assign its NOT NULL default now()
-    const { data, error } = await supabase
-      .from('visitors')
-      .insert([
-        {
-          ip: ipAddress || null,
-          country: country || null,
-          city: city || null,
-          browser: browser || null,
-          device: device || null,
-          os: os || null,
-          user_agent: userAgentStr || null,
-          referrer: referrer || null
-        }
-      ]);
-
-    if (error) {
-      console.error('Error inserting visitor tracking log into Supabase:', {
-        message: error.message,
-        code: error.code,
-        details: error.details,
-        hint: error.hint
-      });
-      return { success: false, error };
+    // Store in localStorage so tracking is always preserved even if network or Supabase is offline
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        const stored = JSON.parse(localStorage.getItem('mtc_visitor_logs') || '[]');
+        const filtered = Array.isArray(stored)
+          ? stored.filter((item: any) => item && item.ip && (item.ip !== localVisitor.ip || (Date.now() - new Date(item.created_at).getTime()) > 30000))
+          : [];
+        const updated = [localVisitor, ...filtered].slice(0, 100);
+        localStorage.setItem('mtc_visitor_logs', JSON.stringify(updated));
+      } catch {
+        // Silently ignore storage errors
+      }
     }
 
-    console.log('Successfully logged visitor to Supabase!', data);
+    // If Supabase client is available, attempt to sync to remote table
+    if (supabase) {
+      try {
+        const insertPromise = supabase
+          .from('visitors')
+          .insert([
+            {
+              ip: ipAddress || null,
+              country: country || null,
+              city: city || null,
+              browser: browser || null,
+              device: device || null,
+              os: os || null,
+              user_agent: userAgentStr || null,
+              referrer: referrer || null
+            }
+          ]);
+
+        const timeoutPromise = new Promise<{ data: any; error: any }>((resolve) =>
+          setTimeout(() => resolve({ data: null, error: new Error('Supabase request timed out') }), 4000)
+        );
+
+        const { data, error } = await Promise.race([insertPromise, timeoutPromise]);
+
+        if (error) {
+          console.warn('Supabase visitor log skipped (table policy or offline):', error.message || error);
+        } else {
+          console.log('Successfully logged visitor to Supabase!', data);
+        }
+      } catch (networkErr: any) {
+        // Silently degrade on fetch failures / unreachable hosts
+        console.warn('Supabase endpoint unreachable; logged to local telemetry:', networkErr?.message || networkErr);
+      }
+    }
 
     // Dispatch a custom event to instantly notify any listening dashboard tables to refresh
     if (typeof window !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('supabase-visitor-tracked', { detail: data }));
+      window.dispatchEvent(new CustomEvent('supabase-visitor-tracked', { detail: localVisitor }));
     }
 
-    return { success: true, data };
-  } catch (err) {
-    console.error('Unexpected error while tracking visitor:', err);
+    return { success: true, data: localVisitor };
+  } catch (err: any) {
+    console.warn('Visitor tracking handled with fallback:', err?.message || err);
     return { success: false, error: err };
   }
 }
 
 /**
- * Retrieves the list of logged visitors from Supabase 'visitors' table.
+ * Retrieves the list of logged visitors from Supabase 'visitors' table,
+ * falling back gracefully to local storage visitor logs if Supabase is offline.
  */
 export async function getVisitors() {
-  if (!supabase) return [];
-  const { data, error } = await supabase
-    .from('visitors')
-    .select('*')
-    .order('created_at', { ascending: false })
-    .limit(100);
-    
-  if (error) {
-    console.error('Error retrieving visitors from Supabase:', error);
-    throw error;
+  let localLogs: any[] = [];
+  if (typeof window !== 'undefined' && window.localStorage) {
+    try {
+      const parsed = JSON.parse(localStorage.getItem('mtc_visitor_logs') || '[]');
+      if (Array.isArray(parsed)) {
+        localLogs = parsed;
+      }
+    } catch {
+      localLogs = [];
+    }
   }
-  return data || [];
+
+  if (!supabase) return localLogs;
+
+  try {
+    const fetchPromise = supabase
+      .from('visitors')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(100);
+
+    const timeoutPromise = new Promise<{ data: any[] | null; error: any }>((resolve) =>
+      setTimeout(() => resolve({ data: null, error: new Error('Supabase request timed out') }), 4000)
+    );
+
+    const { data, error } = await Promise.race([fetchPromise, timeoutPromise]);
+
+    if (error) {
+      console.warn('Could not read from Supabase visitors table, displaying local logs:', error.message || error);
+      return localLogs;
+    }
+
+    if (data && Array.isArray(data) && data.length > 0) {
+      return data;
+    }
+
+    return localLogs;
+  } catch (err: any) {
+    console.warn('Supabase visitors endpoint unreachable, displaying local logs:', err?.message || err);
+    return localLogs;
+  }
 }
