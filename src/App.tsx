@@ -1,12 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { Product, CartItem, WholesaleInquiry } from './types';
 import { WHOLESALE_PRODUCTS } from './data/products';
 import { trackVisitor } from './lib/supabase';
 import Header from './components/Header';
 import Hero from './components/Hero';
-import ProductCatalog from './components/ProductCatalog';
 import ServicesPanel from './components/ServicesPanel';
-import InquiriesDashboard from './components/InquiriesDashboard';
+
+// Code-split heavy catalog and dashboard to eliminate unused initial JavaScript
+const ProductCatalog = lazy(() => import('./components/ProductCatalog'));
+const InquiriesDashboard = lazy(() => import('./components/InquiriesDashboard'));
 import { 
   Building, Mail, Phone, Clock, ChevronRight, Check, MapPin, ExternalLink, 
   ArrowRight, ShieldCheck, HelpCircle, FileText, Compass, Settings, AlertCircle, ShoppingCart 
@@ -158,7 +160,15 @@ export default function App() {
       trackVisitor(finalIp, finalLoc, navigator.userAgent);
     };
 
-    detectIp();
+    // Defer IP detection until browser idle so it never delays critical LCP or FCP
+    if (typeof window !== 'undefined') {
+      const schedule = (window as any).requestIdleCallback
+        ? (cb: () => void) => (window as any).requestIdleCallback(cb, { timeout: 3500 })
+        : (cb: () => void) => setTimeout(cb, 1800);
+      schedule(detectIp);
+    } else {
+      detectIp();
+    }
   }, []);
 
   // Dynamic routing navigation mechanism
@@ -777,22 +787,29 @@ export default function App() {
               {/* Product catalog list & filters */}
               <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
                 <Breadcrumbs crumbs={getBreadcrumbs()} onNavigate={navigateTo} />
-                <ProductCatalog 
-                  cartItems={cartItems} 
-                  onNavigate={navigateTo}
-                  onAddToCart={(p, q) => {
-                    setCartItems((prev) => {
-                      const existingIdx = prev.findIndex((item) => item.product.id === p.id);
-                      if (existingIdx > -1) {
-                        const updated = [...prev];
-                        updated[existingIdx].quantity = q;
-                        return updated;
-                      } else {
-                        return [...prev, { product: p, quantity: q }];
-                      }
-                    });
-                  }} 
-                />
+                <Suspense fallback={
+                  <div className="py-24 text-center text-xs font-mono text-neutral-400">
+                    <div className="inline-block animate-spin h-6 w-6 border-2 border-[#005fa9] border-t-transparent rounded-full mb-3" />
+                    <p>Loading Product Catalogue...</p>
+                  </div>
+                }>
+                  <ProductCatalog 
+                    cartItems={cartItems} 
+                    onNavigate={navigateTo}
+                    onAddToCart={(p, q) => {
+                      setCartItems((prev) => {
+                        const existingIdx = prev.findIndex((item) => item.product.id === p.id);
+                        if (existingIdx > -1) {
+                          const updated = [...prev];
+                          updated[existingIdx].quantity = q;
+                          return updated;
+                        } else {
+                          return [...prev, { product: p, quantity: q }];
+                        }
+                      });
+                    }} 
+                  />
+                </Suspense>
               </div>
             </motion.div>
           )}
@@ -1026,7 +1043,7 @@ export default function App() {
                       <div className="grid gap-4 sm:grid-cols-2">
                         <a 
                           href="tel:+919879211012"
-                          className="flex items-center justify-center space-x-2 border border-slate-300 hover:border-[#005fa9] p-3 text-xs font-bold text-slate-800 hover:text-[#005fa9] transition-all bg-slate-50 uppercase tracking-wider"
+                          className="flex items-center justify-center space-x-2 border border-slate-300 hover:border-[#005fa9] p-3 text-xs font-bold text-slate-800 hover:text-[#005fa9] transition-all bg-slate-50 uppercase tracking-wider min-h-[48px]"
                         >
                           <Phone className="h-4 w-4" />
                           <span>+91 98792 11012</span>
@@ -1034,7 +1051,7 @@ export default function App() {
 
                         <a 
                           href="tel:+919429356522"
-                          className="flex items-center justify-center space-x-2 border border-slate-300 hover:border-[#005fa9] p-3 text-xs font-bold text-slate-800 hover:text-[#005fa9] transition-all bg-slate-50 uppercase tracking-wider"
+                          className="flex items-center justify-center space-x-2 border border-slate-300 hover:border-[#005fa9] p-3 text-xs font-bold text-slate-800 hover:text-[#005fa9] transition-all bg-slate-50 uppercase tracking-wider min-h-[48px]"
                         >
                           <Phone className="h-4 w-4" />
                           <span>+91 94293 56522</span>
@@ -1046,9 +1063,10 @@ export default function App() {
                         href="https://wa.me/919879211012?text=Hello%20Mukesh%20Trading%20Co,%20I%20am%20interested%20in%20your%20industrial%20wire%20mesh%20and%20screening%20products."
                         target="_blank"
                         rel="noreferrer"
-                        className="flex items-center justify-center space-x-2 w-full bg-[#25D366] hover:bg-[#20ba59] text-white p-3.5 text-xs font-bold uppercase tracking-wider transition-colors"
+                        aria-label="Chat with Mukesh Trading Co on WhatsApp"
+                        className="flex items-center justify-center space-x-2 w-full bg-[#075E54] hover:bg-[#128C7E] text-white p-3.5 text-xs font-bold uppercase tracking-wider transition-colors min-h-[48px]"
                       >
-                        <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24">
+                        <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
                           <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.5-5.739-1.451L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.965C16.59 2.019 14.13 1.01 11.999 1.01 6.563 1.01 2.139 5.378 2.135 10.81c0 1.679.444 3.321 1.286 4.773L2.433 21.4l6.023-1.581c1.391.761 2.96 1.161 4.544 1.163z" />
                         </svg>
                         <span>Chat on WhatsApp</span>
@@ -1097,14 +1115,21 @@ export default function App() {
 
                   {/* Right hand contact form (Integrated dynamic inquires CRM table log tracker) */}
                   <div className="lg:col-span-7">
-                    <InquiriesDashboard
-                      inquiries={inquiries}
-                      onUpdateStatus={handleUpdateInquiryStatus}
-                      onClearAll={handleClearInquiriesDb}
-                      onAddInquiry={handleAddInquiry}
-                      visitorIp={visitorIp}
-                      visitorLocation={visitorLocation}
-                    />
+                    <Suspense fallback={
+                      <div className="py-24 text-center text-xs font-mono text-neutral-400">
+                        <div className="inline-block animate-spin h-6 w-6 border-2 border-[#005fa9] border-t-transparent rounded-full mb-3" />
+                        <p>Loading Inquiries CRM...</p>
+                      </div>
+                    }>
+                      <InquiriesDashboard
+                        inquiries={inquiries}
+                        onUpdateStatus={handleUpdateInquiryStatus}
+                        onClearAll={handleClearInquiriesDb}
+                        onAddInquiry={handleAddInquiry}
+                        visitorIp={visitorIp}
+                        visitorLocation={visitorLocation}
+                      />
+                    </Suspense>
                   </div>
 
                 </div>                {/* Lower linking */}
@@ -1214,12 +1239,13 @@ export default function App() {
           href="https://wa.me/919879211012?text=Hello%20Mukesh%20Trading%20Co,%20I%20am%20interested%20in%20your%20industrial%20wire%20mesh%20and%20screening%20products."
           target="_blank"
           rel="noreferrer"
-          className="flex items-center justify-center space-x-2 py-4 bg-[#25D366] hover:bg-[#20ba59] transition-all text-white font-extrabold uppercase tracking-widest text-[10px] font-sans"
+          aria-label="Chat with Mukesh Trading Co on WhatsApp"
+          className="flex items-center justify-center space-x-2 py-4 bg-[#075E54] hover:bg-[#128C7E] transition-all text-white font-extrabold uppercase tracking-widest text-[10px] font-sans"
         >
-          <svg className="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24">
+          <svg className="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.5-5.739-1.451L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.965C16.59 2.019 14.13 1.01 11.999 1.01 6.563 1.01 2.139 5.378 2.135 10.81c0 1.679.444 3.321 1.286 4.773L2.433 21.4l6.023-1.581c1.391.761 2.96 1.161 4.544 1.163z" />
           </svg>
-          <span>WhatsApp Chat</span>
+          <span className="font-bold text-white tracking-wider">WhatsApp Chat</span>
         </a>
       </div>
 

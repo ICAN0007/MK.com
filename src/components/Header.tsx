@@ -191,9 +191,12 @@ export default function Header({ currentPath, onNavigate, isDarkMode, onToggleDa
             id="mobile-menu-toggle"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             whileTap={{ scale: 0.9 }}
-            className="flex items-center justify-center px-4 text-neutral-300 md:hidden hover:text-white border-l border-neutral-800"
+            className="flex items-center justify-center px-4 text-neutral-300 md:hidden hover:text-white border-l border-neutral-800 min-h-[48px] min-w-[48px]"
+            aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            title={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
           >
-            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            <span className="sr-only">{mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}</span>
+            {mobileMenuOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
           </motion.button>
 
           {/* The Distinct Royal Blue Telecom Block */}

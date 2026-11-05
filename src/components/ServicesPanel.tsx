@@ -320,9 +320,9 @@ export default function ServicesPanel({ onCatalogClick, onDealerFormFocus }: Ser
                   Trading Hotlines
                 </span>
                 <p className="text-xs font-bold text-slate-950 mt-1">Direct Procurement Panel:</p>
-                <div className="text-xs font-bold text-slate-900 mt-1 select-all font-mono space-y-1">
-                  <a href="tel:+919879211012" className="block hover:underline hover:text-[#005fa9]">+91 98792 11012</a>
-                  <a href="tel:+919429356522" className="block hover:underline hover:text-[#005fa9]">+91 94293 56522</a>
+                <div className="text-xs font-bold text-slate-900 mt-2 select-all font-mono flex flex-col space-y-2">
+                  <a href="tel:+919879211012" className="inline-flex items-center px-3 py-2.5 rounded bg-slate-100 hover:bg-[#005fa9] hover:text-white transition-colors min-h-[44px] min-w-[200px]">+91 98792 11012</a>
+                  <a href="tel:+919429356522" className="inline-flex items-center px-3 py-2.5 rounded bg-slate-100 hover:bg-[#005fa9] hover:text-white transition-colors min-h-[44px] min-w-[200px]">+91 94293 56522</a>
                 </div>
                 <p className="text-[10px] text-slate-400 mt-2 font-mono">Mon - Sat: 09:00 to 19:00 (IST)</p>
               </div>
@@ -333,11 +333,11 @@ export default function ServicesPanel({ onCatalogClick, onDealerFormFocus }: Ser
                   Corporate Enquiries
                 </span>
                 <p className="text-xs font-bold text-slate-950 mt-1">Bulk Sales & Dealerships:</p>
-                <p className="text-xs mt-1 select-all font-mono">
-                  <a href="mailto:mukeshtradingco16@gmail.com" className="text-slate-900 hover:text-[#005fa9] font-bold hover:underline">
+                <div className="text-xs mt-2 select-all font-mono">
+                  <a href="mailto:mukeshtradingco16@gmail.com" className="inline-flex items-center px-3 py-2.5 rounded bg-slate-100 text-slate-900 hover:text-white hover:bg-[#005fa9] font-bold transition-colors min-h-[44px]">
                     mukeshtradingco16@gmail.com
                   </a>
-                </p>
+                </div>
               </div>
 
             </div>

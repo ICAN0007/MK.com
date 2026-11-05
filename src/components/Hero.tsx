@@ -108,12 +108,20 @@ export default function Hero({ onExploreClick, onPartnerClick }: HeroProps) {
           className="absolute inset-0 z-0 overflow-hidden pointer-events-none will-change-transform"
           style={{ transform: `translate3d(0, ${parallaxY}px, 0)` }}
         >
-          <div 
-            className="absolute inset-0 bg-cover bg-center animate-ken-burns"
-            style={{
-              backgroundImage: `linear-gradient(rgba(10, 10, 10, 0.45), rgba(15, 15, 15, 0.65)), url('https://i.ibb.co/fG9kDh3g/2f9eb394-1796-43d0-a38c-cb555323144c.png')`,
-            }}
-          />
+          <picture className="absolute inset-0 h-full w-full pointer-events-none">
+            <source media="(max-width: 768px)" srcSet="/hero-banner-mobile.webp" type="image/webp" />
+            <source media="(min-width: 769px)" srcSet="/hero-banner.webp" type="image/webp" />
+            <img 
+              src="/hero-banner.webp" 
+              alt="Mukesh Trading Co. Industrial Infrastructure & Screening Warehouse" 
+              className="h-full w-full object-cover object-center animate-ken-burns opacity-65"
+              fetchPriority="high"
+              loading="eager"
+              decoding="async"
+              width="1600"
+              height="358"
+            />
+          </picture>
         </div>
 
         {/* Dark aesthetic gradients covering the layout shift points */}
